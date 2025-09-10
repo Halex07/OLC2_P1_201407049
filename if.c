@@ -3,7 +3,7 @@
 #include <string.h>
 #include <stdbool.h>
 
-// Enumeración de tipos de datos
+// 🧠 Enumeración de tipos de datos
 typedef enum {
     ENTERO,
     DECIMAL,
@@ -13,12 +13,18 @@ typedef enum {
     VOID
 } tipoDato;
 
-// Estructura de Tipo
+// 📦 Estructura de Tipo
 typedef struct {
     tipoDato tipo;
 } Tipo;
 
-// Estructura base de Instrucción
+Tipo crearTipo(tipoDato t) {
+    Tipo nuevo;
+    nuevo.tipo = t;
+    return nuevo;
+}
+
+// 🧠 Estructura base de Instrucción
 typedef struct Instruccion {
     Tipo tipo;
     int linea;
@@ -26,18 +32,19 @@ typedef struct Instruccion {
     void* (*interpretar)(struct Instruccion*, void* arbol, void* tabla);
 } Instruccion;
 
-// Estructura de tabla de símbolos
+// 📚 Estructura de tabla de símbolos
 typedef struct tablaSimbolos {
     struct tablaSimbolos* padre;
 } tablaSimbolos;
 
 tablaSimbolos* crearTablaSimbolos(tablaSimbolos* padre) {
-    tablaSimbolos* nueva = (tablaSimbolos*)malloc(sizeof(tablaSimbolos));
+    tablaSimbolos* nueva = malloc(sizeof(tablaSimbolos));
+    if (!nueva) return NULL;
     nueva->padre = padre;
     return nueva;
 }
 
-// Estructura de error
+// ⚠️ Estructura de error
 typedef struct {
     char* tipo;
     char* mensaje;
@@ -46,7 +53,8 @@ typedef struct {
 } Errores;
 
 Errores* crearError(const char* tipo, const char* mensaje, int linea, int columna) {
-    Errores* err = (Errores*)malloc(sizeof(Errores));
+    Errores* err = malloc(sizeof(Errores));
+    if (!err) return NULL;
     err->tipo = strdup(tipo);
     err->mensaje = strdup(mensaje);
     err->linea = linea;
@@ -54,7 +62,15 @@ Errores* crearError(const char* tipo, const char* mensaje, int linea, int column
     return err;
 }
 
-// Estructura de If
+void liberarError(Errores* err) {
+    if (err) {
+        free(err->tipo);
+        free(err->mensaje);
+        free(err);
+    }
+}
+
+// 🔀 Estructura de If
 typedef struct {
     Instruccion base;
     Instruccion* condicion;
@@ -62,10 +78,10 @@ typedef struct {
     int cantidad;
 } If;
 
-// Constructor de If
 If* crearIf(Instruccion* condicion, Instruccion** instrucciones, int cantidad, int linea, int columna) {
-    If* nuevo = (If*)malloc(sizeof(If));
-    nuevo->base.tipo.tipo = VOID;
+    If* nuevo = malloc(sizeof(If));
+    if (!nuevo) return NULL;
+    nuevo->base.tipo = crearTipo(VOID);
     nuevo->base.linea = linea;
     nuevo->base.columna = columna;
     nuevo->condicion = condicion;
@@ -74,12 +90,36 @@ If* crearIf(Instruccion* condicion, Instruccion** instrucciones, int cantidad, i
     return nuevo;
 }
 
-// Interpretar If
+// 🧠 Interpretar If
 void* interpretarIf(Instruccion* instr, void* arbol, void* tabla) {
+    if (!instr || !tabla) return NULL;
+
     If* si = (If*)instr;
+    if (!si->condicion || !si->condicion->interpretar) return crearError("SEMANTICO", "Condición nula o inválida", instr->linea, instr->columna);
 
     void* cond = si->condicion->interpretar(si->condicion, arbol, tabla);
-    if (cond != NULL && ((Errores*)cond)->tipo != NULL) {
+    if (cond && ((Errores*)cond)->tipo != NULL) {
         return cond;
     }
 
+    if (si->condicion->tipo.tipo != BOOLEANO) {
+        return crearError("SEMANTICO", "Expresión condicional no booleana", instr->linea, instr->columna);
+    }
+
+    tablaSimbolos* newTabla = crearTablaSimbolos((tablaSimbolos*)tabla);
+    if (!newTabla) return crearError("SEMANTICO", "Error al crear entorno", instr->linea, instr->columna);
+
+    if ((bool)cond) {
+        for (int i = 0; i < si->cantidad; i++) {
+            Instruccion* actual = si->instrucciones[i];
+            if (!actual || !actual->interpretar) continue;
+
+            void* resultado = actual->interpretar(actual, arbol, newTabla);
+            if (resultado && ((Errores*)resultado)->tipo != NULL) {
+                return resultado;
+            }
+        }
+    }
+
+    return NULL;
+}
