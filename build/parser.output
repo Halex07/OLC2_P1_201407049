@@ -1,0 +1,6024 @@
+Terminales no usados en la gramática
+
+    INTEGER_I
+    FOREACH
+    INT
+    PRINT
+    JOIN
+    PARSEDOUBLE
+
+
+Estado 23 conflictos: 1 reducción/reducción
+Estado 61 conflictos: 1 desplazamiento/reducción
+Estado 75 conflictos: 13 desplazamiento/reducción
+Estado 79 conflictos: 19 desplazamiento/reducción
+Estado 107 conflictos: 1 desplazamiento/reducción
+Estado 128 conflictos: 19 desplazamiento/reducción
+Estado 129 conflictos: 19 desplazamiento/reducción
+Estado 130 conflictos: 19 desplazamiento/reducción
+Estado 131 conflictos: 19 desplazamiento/reducción
+Estado 132 conflictos: 19 desplazamiento/reducción
+Estado 133 conflictos: 19 desplazamiento/reducción
+Estado 134 conflictos: 19 desplazamiento/reducción
+Estado 135 conflictos: 19 desplazamiento/reducción
+Estado 136 conflictos: 13 desplazamiento/reducción
+Estado 137 conflictos: 13 desplazamiento/reducción
+Estado 138 conflictos: 13 desplazamiento/reducción
+Estado 139 conflictos: 13 desplazamiento/reducción
+Estado 140 conflictos: 13 desplazamiento/reducción
+Estado 141 conflictos: 13 desplazamiento/reducción
+Estado 144 conflictos: 19 desplazamiento/reducción
+Estado 145 conflictos: 19 desplazamiento/reducción
+Estado 146 conflictos: 19 desplazamiento/reducción
+Estado 147 conflictos: 19 desplazamiento/reducción
+Estado 164 conflictos: 19 desplazamiento/reducción
+Estado 165 conflictos: 1 desplazamiento/reducción
+Estado 183 conflictos: 1 desplazamiento/reducción
+Estado 187 conflictos: 19 desplazamiento/reducción
+Estado 221 conflictos: 1 desplazamiento/reducción
+Estado 242 conflictos: 19 desplazamiento/reducción
+Estado 250 conflictos: 1 desplazamiento/reducción
+Estado 252 conflictos: 1 desplazamiento/reducción
+
+
+Gramática
+
+    0 $accept: program $end
+
+    1 program: lines
+
+    2 lines: ε
+    3      | lines line
+
+    4 line: expr end
+    5     | SYSTEM '.' OUT '.' PRINTLN '(' expr ')' end
+    6     | SYSTEM '.' OUT '.' PRINTLN '(' ')' end
+    7     | declaration end
+    8     | declaration
+    9     | assigment end
+   10     | assigment
+   11     | block
+   12     | sentenciasIf
+   13     | loopWhile
+   14     | loopFor
+   15     | function
+   16     | sentenciasSwitch
+   17     | BREAK end
+   18     | RETURN expr end
+   19     | RETURN end
+   20     | larray
+   21     | multiDimension
+
+   22 sentenciasIf: IF '(' expr ')' block
+   23             | IF '(' expr ')' block ELSE block
+
+   24 loopWhile: WHILE '(' expr ')' block
+
+   25 loopFor: FOR '(' declaration end expr end assigment ')' block
+   26        | FOR '(' tipo ID DOSPUNTOS ID ')' block
+
+   27 block: '{' lines '}'
+
+   28 end: ';'
+
+   29 case_list: ε
+   30          | case_list case_stmt
+
+   31 case_stmt: CASE expr DOSPUNTOS lines
+   32          | DEFAULT DOSPUNTOS lines
+
+   33 function: PUBLIC tipo ID '(' params ')' block
+   34         | PUBLIC STATIC tipo ID '(' params ')' block
+
+   35 params: ε
+   36       | paramlist
+
+   37 paramlist: tipo ID
+   38          | tipo ID ',' paramlist
+
+   39 declaration: tipo ID '=' expr
+   40            | tipo ID
+   41            | FINAL tipo ID '=' expr
+
+   42 assigment: ID '=' expr
+
+   43 multiDimension: tipo '[' ']' '[' ']' ID '=' NEW tipo '[' expr ']' '[' expr ']' end
+   44               | tipo '[' ']' '[' ']' ID '=' '{' elementos '}' end
+
+   45 tipo: INTEGER
+   46     | TP_STRING
+   47     | TP_FLOAT
+   48     | TP_DOUBLE
+   49     | BOOLEAN
+   50     | TP_CHAR
+   51     | VOID
+   52     | BREAK
+   53     | ARRAY
+   54     | CONTINUE
+
+   55 expr: expr '+' expr
+   56     | expr '-' expr
+   57     | expr '*' expr
+   58     | expr '/' expr
+   59     | expr '%' expr
+   60     | '-' expr
+   61     | expr AND expr
+   62     | expr OR expr
+   63     | expr LE expr
+   64     | expr GE expr
+   65     | expr '<' expr
+   66     | expr '>' expr
+   67     | expr EQ expr
+   68     | expr NEQ expr
+   69     | expr '&' expr
+   70     | expr '|' expr
+   71     | expr '^' expr
+   72     | expr SHR expr
+   73     | expr SHL expr
+   74     | '!' expr
+   75     | '(' expr ')'
+   76     | '(' tipo ')' expr
+   77     | VALUEOF '(' expr ')'
+   78     | callFunction
+   79     | ID '[' expr ']'
+   80     | ID '[' expr ']' '=' expr
+   81     | NUMBER
+   82     | DECIMAL
+   83     | FLOAD
+   84     | STRING
+   85     | CHAR
+   86     | ID
+   87     | TRUE
+   88     | FALSE
+   89     | CONTINUE
+   90     | ID '[' expr ']' '[' expr ']'
+   91     | ID '[' expr ']' '[' expr ']' '=' expr
+   92     | ARRAYS '.' INDEXOF '(' expr ',' expr ')'
+   93     | expr '.' EQUALS '(' expr ')'
+   94     | expr '.' LENGTH
+   95     | PARSEINT '(' expr ')'
+   96     | PARSEFLOAT '(' expr ')'
+
+   97 callFunction: ID '(' args ')'
+
+   98 args: ε
+   99     | arglist
+
+  100 arglist: expr
+  101        | expr ',' arglist
+
+  102 sentenciasSwitch: SWITCH '(' expr ')' '{' case_list '}'
+
+  103 elementos: expr ',' elementos
+  104          | elementos ',' elementos
+  105          | '{' elementos '}'
+  106          | expr
+
+  107 larray: tipo '[' ']' ID '=' NEW tipo '[' expr ']' end
+  108       | tipo '[' ']' ID '=' '{' elementos '}' end
+  109       | tipo '[' ']' ID '=' ID '.' ADD '(' expr ')' end
+
+
+Terminales con las reglas donde aparecen
+
+    $end (0) 0
+    '!' (33) 74
+    '%' (37) 59
+    '&' (38) 69
+    '(' (40) 5 6 22 23 24 25 26 33 34 75 76 77 92 93 95 96 97 102 109
+    ')' (41) 5 6 22 23 24 25 26 33 34 75 76 77 92 93 95 96 97 102 109
+    '*' (42) 57
+    '+' (43) 55
+    ',' (44) 38 92 101 103 104
+    '-' (45) 56 60
+    '.' (46) 5 6 92 93 94 109
+    '/' (47) 58
+    ';' (59) 28
+    '<' (60) 65
+    '=' (61) 39 41 42 43 44 80 91 107 108 109
+    '>' (62) 66
+    '[' (91) 43 44 79 80 90 91 107 108 109
+    ']' (93) 43 44 79 80 90 91 107 108 109
+    '^' (94) 71
+    '{' (123) 27 44 102 105 108
+    '|' (124) 70
+    '}' (125) 27 44 102 105 108
+    error (256)
+    FLOAD <ftnt> (258) 83
+    STRING <str> (259) 84
+    ID <str> (260) 26 33 34 37 38 39 40 41 42 43 44 79 80 86 90 91 97 107 108 109
+    CHAR <ch> (261) 85
+    DECIMAL <dble> (262) 82
+    NUMBER <num> (263) 81
+    TRUE <num> (264) 87
+    FALSE <num> (265) 88
+    BOOLEAN (266) 49
+    TP_DOUBLE (267) 48
+    TP_FLOAT (268) 47
+    TP_STRING (269) 46
+    TP_CHAR (270) 50
+    INTEGER_I (271)
+    INTEGER (272) 45
+    GE (273) 64
+    LE (274) 63
+    EQ (275) 67
+    NEQ (276) 68
+    SHR (277) 72
+    SHL (278) 73
+    OR (279) 62
+    AND (280) 61
+    IF (281) 22 23
+    ELSE (282) 23
+    WHILE (283) 24
+    FOR (284) 25 26
+    FOREACH (285)
+    SWITCH (286) 102
+    CASE (287) 31
+    DEFAULT (288) 32
+    BREAK (289) 17 52
+    CONTINUE (290) 54 89
+    RETURN (291) 18 19
+    PUBLIC (292) 33 34
+    STATIC (293) 34
+    VOID (294) 51
+    EQUALS (295) 93
+    INT (296)
+    NEW (297) 43 107
+    ARRAYS (298) 92
+    INDEXOF (299) 92
+    SYSTEM (300) 5 6
+    OUT (301) 5 6
+    PRINTLN (302) 5 6
+    VALUEOF (303) 77
+    PRINT (304)
+    JOIN (305)
+    ARRAY (306) 53
+    LENGTH (307) 94
+    ADD (308) 109
+    PARSEINT (309) 95
+    PARSEFLOAT (310) 96
+    PARSEDOUBLE (311)
+    FINAL (312) 41
+    DOSPUNTOS (313) 26 31 32
+    UMINUS (314)
+
+
+No terminales con las reglas donde aparecen
+
+    $accept (81)
+        on left: 0
+    program <node> (82)
+        on left: 1
+        on right: 0
+    lines <node> (83)
+        on left: 2 3
+        on right: 1 3 27 31 32
+    line <node> (84)
+        on left: 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21
+        on right: 3
+    sentenciasIf <node> (85)
+        on left: 22 23
+        on right: 12
+    loopWhile <node> (86)
+        on left: 24
+        on right: 13
+    loopFor <node> (87)
+        on left: 25 26
+        on right: 14
+    block <node> (88)
+        on left: 27
+        on right: 11 22 23 24 25 26 33 34
+    end (89)
+        on left: 28
+        on right: 4 5 6 7 9 17 18 19 25 43 44 107 108 109
+    case_list <node> (90)
+        on left: 29 30
+        on right: 30 102
+    case_stmt <node> (91)
+        on left: 31 32
+        on right: 30
+    function <node> (92)
+        on left: 33 34
+        on right: 15
+    params <plist> (93)
+        on left: 35 36
+        on right: 33 34
+    paramlist <plist> (94)
+        on left: 37 38
+        on right: 36 38
+    declaration <node> (95)
+        on left: 39 40 41
+        on right: 7 8 25
+    assigment <node> (96)
+        on left: 42
+        on right: 9 10 25
+    multiDimension <node> (97)
+        on left: 43 44
+        on right: 21
+    tipo <tipo> (98)
+        on left: 45 46 47 48 49 50 51 52 53 54
+        on right: 26 33 34 37 38 39 40 41 43 44 76 107 108 109
+    expr <node> (99)
+        on left: 55 56 57 58 59 60 61 62 63 64 65 66 67 68 69 70 71 72 73 74 75 76 77 78 79 80 81 82 83 84 85 86 87 88 89 90 91 92 93 94 95 96
+        on right: 4 5 18 22 23 24 25 31 39 41 42 43 55 56 57 58 59 60 61 62 63 64 65 66 67 68 69 70 71 72 73 74 75 76 77 79 80 90 91 92 93 94 95 96 100 101 102 103 106 107 109
+    callFunction <node> (100)
+        on left: 97
+        on right: 78
+    args <args> (101)
+        on left: 98 99
+        on right: 97
+    arglist <args> (102)
+        on left: 100 101
+        on right: 99 101
+    sentenciasSwitch <node> (103)
+        on left: 102
+        on right: 16
+    elementos <node> (104)
+        on left: 103 104 105 106
+        on right: 44 103 104 105 108
+    larray <node> (105)
+        on left: 107 108 109
+        on right: 20
+
+
+Estado 0
+
+    0 $accept: • program $end
+
+    $default  reduce usando la regla 2 (lines)
+
+    program  ir al estado 1
+    lines    ir al estado 2
+
+
+Estado 1
+
+    0 $accept: program • $end
+
+    $end  desplazar e ir al estado 3
+
+
+Estado 2
+
+    1 program: lines •
+    3 lines: lines • line
+
+    FLOAD       desplazar e ir al estado 4
+    STRING      desplazar e ir al estado 5
+    ID          desplazar e ir al estado 6
+    CHAR        desplazar e ir al estado 7
+    DECIMAL     desplazar e ir al estado 8
+    NUMBER      desplazar e ir al estado 9
+    TRUE        desplazar e ir al estado 10
+    FALSE       desplazar e ir al estado 11
+    BOOLEAN     desplazar e ir al estado 12
+    TP_DOUBLE   desplazar e ir al estado 13
+    TP_FLOAT    desplazar e ir al estado 14
+    TP_STRING   desplazar e ir al estado 15
+    TP_CHAR     desplazar e ir al estado 16
+    INTEGER     desplazar e ir al estado 17
+    IF          desplazar e ir al estado 18
+    WHILE       desplazar e ir al estado 19
+    FOR         desplazar e ir al estado 20
+    SWITCH      desplazar e ir al estado 21
+    BREAK       desplazar e ir al estado 22
+    CONTINUE    desplazar e ir al estado 23
+    RETURN      desplazar e ir al estado 24
+    PUBLIC      desplazar e ir al estado 25
+    VOID        desplazar e ir al estado 26
+    ARRAYS      desplazar e ir al estado 27
+    SYSTEM      desplazar e ir al estado 28
+    VALUEOF     desplazar e ir al estado 29
+    ARRAY       desplazar e ir al estado 30
+    PARSEINT    desplazar e ir al estado 31
+    PARSEFLOAT  desplazar e ir al estado 32
+    FINAL       desplazar e ir al estado 33
+    '-'         desplazar e ir al estado 34
+    '('         desplazar e ir al estado 35
+    '{'         desplazar e ir al estado 36
+    '!'         desplazar e ir al estado 37
+
+    $default  reduce usando la regla 1 (program)
+
+    line              ir al estado 38
+    sentenciasIf      ir al estado 39
+    loopWhile         ir al estado 40
+    loopFor           ir al estado 41
+    block             ir al estado 42
+    function          ir al estado 43
+    declaration       ir al estado 44
+    assigment         ir al estado 45
+    multiDimension    ir al estado 46
+    tipo              ir al estado 47
+    expr              ir al estado 48
+    callFunction      ir al estado 49
+    sentenciasSwitch  ir al estado 50
+    larray            ir al estado 51
+
+
+Estado 3
+
+    0 $accept: program $end •
+
+    $default  aceptar
+
+
+Estado 4
+
+   83 expr: FLOAD •
+
+    $default  reduce usando la regla 83 (expr)
+
+
+Estado 5
+
+   84 expr: STRING •
+
+    $default  reduce usando la regla 84 (expr)
+
+
+Estado 6
+
+   42 assigment: ID • '=' expr
+   79 expr: ID • '[' expr ']'
+   80     | ID • '[' expr ']' '=' expr
+   86     | ID •
+   90     | ID • '[' expr ']' '[' expr ']'
+   91     | ID • '[' expr ']' '[' expr ']' '=' expr
+   97 callFunction: ID • '(' args ')'
+
+    '('  desplazar e ir al estado 52
+    '='  desplazar e ir al estado 53
+    '['  desplazar e ir al estado 54
+
+    $default  reduce usando la regla 86 (expr)
+
+
+Estado 7
+
+   85 expr: CHAR •
+
+    $default  reduce usando la regla 85 (expr)
+
+
+Estado 8
+
+   82 expr: DECIMAL •
+
+    $default  reduce usando la regla 82 (expr)
+
+
+Estado 9
+
+   81 expr: NUMBER •
+
+    $default  reduce usando la regla 81 (expr)
+
+
+Estado 10
+
+   87 expr: TRUE •
+
+    $default  reduce usando la regla 87 (expr)
+
+
+Estado 11
+
+   88 expr: FALSE •
+
+    $default  reduce usando la regla 88 (expr)
+
+
+Estado 12
+
+   49 tipo: BOOLEAN •
+
+    $default  reduce usando la regla 49 (tipo)
+
+
+Estado 13
+
+   48 tipo: TP_DOUBLE •
+
+    $default  reduce usando la regla 48 (tipo)
+
+
+Estado 14
+
+   47 tipo: TP_FLOAT •
+
+    $default  reduce usando la regla 47 (tipo)
+
+
+Estado 15
+
+   46 tipo: TP_STRING •
+
+    $default  reduce usando la regla 46 (tipo)
+
+
+Estado 16
+
+   50 tipo: TP_CHAR •
+
+    $default  reduce usando la regla 50 (tipo)
+
+
+Estado 17
+
+   45 tipo: INTEGER •
+
+    $default  reduce usando la regla 45 (tipo)
+
+
+Estado 18
+
+   22 sentenciasIf: IF • '(' expr ')' block
+   23             | IF • '(' expr ')' block ELSE block
+
+    '('  desplazar e ir al estado 55
+
+
+Estado 19
+
+   24 loopWhile: WHILE • '(' expr ')' block
+
+    '('  desplazar e ir al estado 56
+
+
+Estado 20
+
+   25 loopFor: FOR • '(' declaration end expr end assigment ')' block
+   26        | FOR • '(' tipo ID DOSPUNTOS ID ')' block
+
+    '('  desplazar e ir al estado 57
+
+
+Estado 21
+
+  102 sentenciasSwitch: SWITCH • '(' expr ')' '{' case_list '}'
+
+    '('  desplazar e ir al estado 58
+
+
+Estado 22
+
+   17 line: BREAK • end
+   52 tipo: BREAK •
+
+    ';'  desplazar e ir al estado 59
+
+    $default  reduce usando la regla 52 (tipo)
+
+    end  ir al estado 60
+
+
+Estado 23
+
+   54 tipo: CONTINUE •
+   89 expr: CONTINUE •
+
+    ID        reduce usando la regla 54 (tipo)
+    ')'       reduce usando la regla 54 (tipo)
+    ')'       [reduce usando la regla 89 (expr)]
+    '['       reduce usando la regla 54 (tipo)
+    $default  reduce usando la regla 89 (expr)
+
+
+Estado 24
+
+   18 line: RETURN • expr end
+   19     | RETURN • end
+
+    FLOAD       desplazar e ir al estado 4
+    STRING      desplazar e ir al estado 5
+    ID          desplazar e ir al estado 61
+    CHAR        desplazar e ir al estado 7
+    DECIMAL     desplazar e ir al estado 8
+    NUMBER      desplazar e ir al estado 9
+    TRUE        desplazar e ir al estado 10
+    FALSE       desplazar e ir al estado 11
+    CONTINUE    desplazar e ir al estado 62
+    ARRAYS      desplazar e ir al estado 27
+    VALUEOF     desplazar e ir al estado 29
+    PARSEINT    desplazar e ir al estado 31
+    PARSEFLOAT  desplazar e ir al estado 32
+    '-'         desplazar e ir al estado 34
+    '('         desplazar e ir al estado 35
+    ';'         desplazar e ir al estado 59
+    '!'         desplazar e ir al estado 37
+
+    end           ir al estado 63
+    expr          ir al estado 64
+    callFunction  ir al estado 49
+
+
+Estado 25
+
+   33 function: PUBLIC • tipo ID '(' params ')' block
+   34         | PUBLIC • STATIC tipo ID '(' params ')' block
+
+    BOOLEAN    desplazar e ir al estado 12
+    TP_DOUBLE  desplazar e ir al estado 13
+    TP_FLOAT   desplazar e ir al estado 14
+    TP_STRING  desplazar e ir al estado 15
+    TP_CHAR    desplazar e ir al estado 16
+    INTEGER    desplazar e ir al estado 17
+    BREAK      desplazar e ir al estado 65
+    CONTINUE   desplazar e ir al estado 66
+    STATIC     desplazar e ir al estado 67
+    VOID       desplazar e ir al estado 26
+    ARRAY      desplazar e ir al estado 30
+
+    tipo  ir al estado 68
+
+
+Estado 26
+
+   51 tipo: VOID •
+
+    $default  reduce usando la regla 51 (tipo)
+
+
+Estado 27
+
+   92 expr: ARRAYS • '.' INDEXOF '(' expr ',' expr ')'
+
+    '.'  desplazar e ir al estado 69
+
+
+Estado 28
+
+    5 line: SYSTEM • '.' OUT '.' PRINTLN '(' expr ')' end
+    6     | SYSTEM • '.' OUT '.' PRINTLN '(' ')' end
+
+    '.'  desplazar e ir al estado 70
+
+
+Estado 29
+
+   77 expr: VALUEOF • '(' expr ')'
+
+    '('  desplazar e ir al estado 71
+
+
+Estado 30
+
+   53 tipo: ARRAY •
+
+    $default  reduce usando la regla 53 (tipo)
+
+
+Estado 31
+
+   95 expr: PARSEINT • '(' expr ')'
+
+    '('  desplazar e ir al estado 72
+
+
+Estado 32
+
+   96 expr: PARSEFLOAT • '(' expr ')'
+
+    '('  desplazar e ir al estado 73
+
+
+Estado 33
+
+   41 declaration: FINAL • tipo ID '=' expr
+
+    BOOLEAN    desplazar e ir al estado 12
+    TP_DOUBLE  desplazar e ir al estado 13
+    TP_FLOAT   desplazar e ir al estado 14
+    TP_STRING  desplazar e ir al estado 15
+    TP_CHAR    desplazar e ir al estado 16
+    INTEGER    desplazar e ir al estado 17
+    BREAK      desplazar e ir al estado 65
+    CONTINUE   desplazar e ir al estado 66
+    VOID       desplazar e ir al estado 26
+    ARRAY      desplazar e ir al estado 30
+
+    tipo  ir al estado 74
+
+
+Estado 34
+
+   60 expr: '-' • expr
+
+    FLOAD       desplazar e ir al estado 4
+    STRING      desplazar e ir al estado 5
+    ID          desplazar e ir al estado 61
+    CHAR        desplazar e ir al estado 7
+    DECIMAL     desplazar e ir al estado 8
+    NUMBER      desplazar e ir al estado 9
+    TRUE        desplazar e ir al estado 10
+    FALSE       desplazar e ir al estado 11
+    CONTINUE    desplazar e ir al estado 62
+    ARRAYS      desplazar e ir al estado 27
+    VALUEOF     desplazar e ir al estado 29
+    PARSEINT    desplazar e ir al estado 31
+    PARSEFLOAT  desplazar e ir al estado 32
+    '-'         desplazar e ir al estado 34
+    '('         desplazar e ir al estado 35
+    '!'         desplazar e ir al estado 37
+
+    expr          ir al estado 75
+    callFunction  ir al estado 49
+
+
+Estado 35
+
+   75 expr: '(' • expr ')'
+   76     | '(' • tipo ')' expr
+
+    FLOAD       desplazar e ir al estado 4
+    STRING      desplazar e ir al estado 5
+    ID          desplazar e ir al estado 61
+    CHAR        desplazar e ir al estado 7
+    DECIMAL     desplazar e ir al estado 8
+    NUMBER      desplazar e ir al estado 9
+    TRUE        desplazar e ir al estado 10
+    FALSE       desplazar e ir al estado 11
+    BOOLEAN     desplazar e ir al estado 12
+    TP_DOUBLE   desplazar e ir al estado 13
+    TP_FLOAT    desplazar e ir al estado 14
+    TP_STRING   desplazar e ir al estado 15
+    TP_CHAR     desplazar e ir al estado 16
+    INTEGER     desplazar e ir al estado 17
+    BREAK       desplazar e ir al estado 65
+    CONTINUE    desplazar e ir al estado 23
+    VOID        desplazar e ir al estado 26
+    ARRAYS      desplazar e ir al estado 27
+    VALUEOF     desplazar e ir al estado 29
+    ARRAY       desplazar e ir al estado 30
+    PARSEINT    desplazar e ir al estado 31
+    PARSEFLOAT  desplazar e ir al estado 32
+    '-'         desplazar e ir al estado 34
+    '('         desplazar e ir al estado 35
+    '!'         desplazar e ir al estado 37
+
+    tipo          ir al estado 76
+    expr          ir al estado 77
+    callFunction  ir al estado 49
+
+
+Estado 36
+
+   27 block: '{' • lines '}'
+
+    $default  reduce usando la regla 2 (lines)
+
+    lines  ir al estado 78
+
+
+Estado 37
+
+   74 expr: '!' • expr
+
+    FLOAD       desplazar e ir al estado 4
+    STRING      desplazar e ir al estado 5
+    ID          desplazar e ir al estado 61
+    CHAR        desplazar e ir al estado 7
+    DECIMAL     desplazar e ir al estado 8
+    NUMBER      desplazar e ir al estado 9
+    TRUE        desplazar e ir al estado 10
+    FALSE       desplazar e ir al estado 11
+    CONTINUE    desplazar e ir al estado 62
+    ARRAYS      desplazar e ir al estado 27
+    VALUEOF     desplazar e ir al estado 29
+    PARSEINT    desplazar e ir al estado 31
+    PARSEFLOAT  desplazar e ir al estado 32
+    '-'         desplazar e ir al estado 34
+    '('         desplazar e ir al estado 35
+    '!'         desplazar e ir al estado 37
+
+    expr          ir al estado 79
+    callFunction  ir al estado 49
+
+
+Estado 38
+
+    3 lines: lines line •
+
+    $default  reduce usando la regla 3 (lines)
+
+
+Estado 39
+
+   12 line: sentenciasIf •
+
+    $default  reduce usando la regla 12 (line)
+
+
+Estado 40
+
+   13 line: loopWhile •
+
+    $default  reduce usando la regla 13 (line)
+
+
+Estado 41
+
+   14 line: loopFor •
+
+    $default  reduce usando la regla 14 (line)
+
+
+Estado 42
+
+   11 line: block •
+
+    $default  reduce usando la regla 11 (line)
+
+
+Estado 43
+
+   15 line: function •
+
+    $default  reduce usando la regla 15 (line)
+
+
+Estado 44
+
+    7 line: declaration • end
+    8     | declaration •
+
+    ';'  desplazar e ir al estado 59
+
+    $default  reduce usando la regla 8 (line)
+
+    end  ir al estado 80
+
+
+Estado 45
+
+    9 line: assigment • end
+   10     | assigment •
+
+    ';'  desplazar e ir al estado 59
+
+    $default  reduce usando la regla 10 (line)
+
+    end  ir al estado 81
+
+
+Estado 46
+
+   21 line: multiDimension •
+
+    $default  reduce usando la regla 21 (line)
+
+
+Estado 47
+
+   39 declaration: tipo • ID '=' expr
+   40            | tipo • ID
+   43 multiDimension: tipo • '[' ']' '[' ']' ID '=' NEW tipo '[' expr ']' '[' expr ']' end
+   44               | tipo • '[' ']' '[' ']' ID '=' '{' elementos '}' end
+  107 larray: tipo • '[' ']' ID '=' NEW tipo '[' expr ']' end
+  108       | tipo • '[' ']' ID '=' '{' elementos '}' end
+  109       | tipo • '[' ']' ID '=' ID '.' ADD '(' expr ')' end
+
+    ID   desplazar e ir al estado 82
+    '['  desplazar e ir al estado 83
+
+
+Estado 48
+
+    4 line: expr • end
+   55 expr: expr • '+' expr
+   56     | expr • '-' expr
+   57     | expr • '*' expr
+   58     | expr • '/' expr
+   59     | expr • '%' expr
+   61     | expr • AND expr
+   62     | expr • OR expr
+   63     | expr • LE expr
+   64     | expr • GE expr
+   65     | expr • '<' expr
+   66     | expr • '>' expr
+   67     | expr • EQ expr
+   68     | expr • NEQ expr
+   69     | expr • '&' expr
+   70     | expr • '|' expr
+   71     | expr • '^' expr
+   72     | expr • SHR expr
+   73     | expr • SHL expr
+   93     | expr • '.' EQUALS '(' expr ')'
+   94     | expr • '.' LENGTH
+
+    GE   desplazar e ir al estado 84
+    LE   desplazar e ir al estado 85
+    EQ   desplazar e ir al estado 86
+    NEQ  desplazar e ir al estado 87
+    SHR  desplazar e ir al estado 88
+    SHL  desplazar e ir al estado 89
+    OR   desplazar e ir al estado 90
+    AND  desplazar e ir al estado 91
+    '>'  desplazar e ir al estado 92
+    '<'  desplazar e ir al estado 93
+    '+'  desplazar e ir al estado 94
+    '-'  desplazar e ir al estado 95
+    '*'  desplazar e ir al estado 96
+    '/'  desplazar e ir al estado 97
+    '.'  desplazar e ir al estado 98
+    ';'  desplazar e ir al estado 59
+    '%'  desplazar e ir al estado 99
+    '&'  desplazar e ir al estado 100
+    '|'  desplazar e ir al estado 101
+    '^'  desplazar e ir al estado 102
+
+    end  ir al estado 103
+
+
+Estado 49
+
+   78 expr: callFunction •
+
+    $default  reduce usando la regla 78 (expr)
+
+
+Estado 50
+
+   16 line: sentenciasSwitch •
+
+    $default  reduce usando la regla 16 (line)
+
+
+Estado 51
+
+   20 line: larray •
+
+    $default  reduce usando la regla 20 (line)
+
+
+Estado 52
+
+   97 callFunction: ID '(' • args ')'
+
+    FLOAD       desplazar e ir al estado 4
+    STRING      desplazar e ir al estado 5
+    ID          desplazar e ir al estado 61
+    CHAR        desplazar e ir al estado 7
+    DECIMAL     desplazar e ir al estado 8
+    NUMBER      desplazar e ir al estado 9
+    TRUE        desplazar e ir al estado 10
+    FALSE       desplazar e ir al estado 11
+    CONTINUE    desplazar e ir al estado 62
+    ARRAYS      desplazar e ir al estado 27
+    VALUEOF     desplazar e ir al estado 29
+    PARSEINT    desplazar e ir al estado 31
+    PARSEFLOAT  desplazar e ir al estado 32
+    '-'         desplazar e ir al estado 34
+    '('         desplazar e ir al estado 35
+    '!'         desplazar e ir al estado 37
+
+    $default  reduce usando la regla 98 (args)
+
+    expr          ir al estado 104
+    callFunction  ir al estado 49
+    args          ir al estado 105
+    arglist       ir al estado 106
+
+
+Estado 53
+
+   42 assigment: ID '=' • expr
+
+    FLOAD       desplazar e ir al estado 4
+    STRING      desplazar e ir al estado 5
+    ID          desplazar e ir al estado 61
+    CHAR        desplazar e ir al estado 7
+    DECIMAL     desplazar e ir al estado 8
+    NUMBER      desplazar e ir al estado 9
+    TRUE        desplazar e ir al estado 10
+    FALSE       desplazar e ir al estado 11
+    CONTINUE    desplazar e ir al estado 62
+    ARRAYS      desplazar e ir al estado 27
+    VALUEOF     desplazar e ir al estado 29
+    PARSEINT    desplazar e ir al estado 31
+    PARSEFLOAT  desplazar e ir al estado 32
+    '-'         desplazar e ir al estado 34
+    '('         desplazar e ir al estado 35
+    '!'         desplazar e ir al estado 37
+
+    expr          ir al estado 107
+    callFunction  ir al estado 49
+
+
+Estado 54
+
+   79 expr: ID '[' • expr ']'
+   80     | ID '[' • expr ']' '=' expr
+   90     | ID '[' • expr ']' '[' expr ']'
+   91     | ID '[' • expr ']' '[' expr ']' '=' expr
+
+    FLOAD       desplazar e ir al estado 4
+    STRING      desplazar e ir al estado 5
+    ID          desplazar e ir al estado 61
+    CHAR        desplazar e ir al estado 7
+    DECIMAL     desplazar e ir al estado 8
+    NUMBER      desplazar e ir al estado 9
+    TRUE        desplazar e ir al estado 10
+    FALSE       desplazar e ir al estado 11
+    CONTINUE    desplazar e ir al estado 62
+    ARRAYS      desplazar e ir al estado 27
+    VALUEOF     desplazar e ir al estado 29
+    PARSEINT    desplazar e ir al estado 31
+    PARSEFLOAT  desplazar e ir al estado 32
+    '-'         desplazar e ir al estado 34
+    '('         desplazar e ir al estado 35
+    '!'         desplazar e ir al estado 37
+
+    expr          ir al estado 108
+    callFunction  ir al estado 49
+
+
+Estado 55
+
+   22 sentenciasIf: IF '(' • expr ')' block
+   23             | IF '(' • expr ')' block ELSE block
+
+    FLOAD       desplazar e ir al estado 4
+    STRING      desplazar e ir al estado 5
+    ID          desplazar e ir al estado 61
+    CHAR        desplazar e ir al estado 7
+    DECIMAL     desplazar e ir al estado 8
+    NUMBER      desplazar e ir al estado 9
+    TRUE        desplazar e ir al estado 10
+    FALSE       desplazar e ir al estado 11
+    CONTINUE    desplazar e ir al estado 62
+    ARRAYS      desplazar e ir al estado 27
+    VALUEOF     desplazar e ir al estado 29
+    PARSEINT    desplazar e ir al estado 31
+    PARSEFLOAT  desplazar e ir al estado 32
+    '-'         desplazar e ir al estado 34
+    '('         desplazar e ir al estado 35
+    '!'         desplazar e ir al estado 37
+
+    expr          ir al estado 109
+    callFunction  ir al estado 49
+
+
+Estado 56
+
+   24 loopWhile: WHILE '(' • expr ')' block
+
+    FLOAD       desplazar e ir al estado 4
+    STRING      desplazar e ir al estado 5
+    ID          desplazar e ir al estado 61
+    CHAR        desplazar e ir al estado 7
+    DECIMAL     desplazar e ir al estado 8
+    NUMBER      desplazar e ir al estado 9
+    TRUE        desplazar e ir al estado 10
+    FALSE       desplazar e ir al estado 11
+    CONTINUE    desplazar e ir al estado 62
+    ARRAYS      desplazar e ir al estado 27
+    VALUEOF     desplazar e ir al estado 29
+    PARSEINT    desplazar e ir al estado 31
+    PARSEFLOAT  desplazar e ir al estado 32
+    '-'         desplazar e ir al estado 34
+    '('         desplazar e ir al estado 35
+    '!'         desplazar e ir al estado 37
+
+    expr          ir al estado 110
+    callFunction  ir al estado 49
+
+
+Estado 57
+
+   25 loopFor: FOR '(' • declaration end expr end assigment ')' block
+   26        | FOR '(' • tipo ID DOSPUNTOS ID ')' block
+
+    BOOLEAN    desplazar e ir al estado 12
+    TP_DOUBLE  desplazar e ir al estado 13
+    TP_FLOAT   desplazar e ir al estado 14
+    TP_STRING  desplazar e ir al estado 15
+    TP_CHAR    desplazar e ir al estado 16
+    INTEGER    desplazar e ir al estado 17
+    BREAK      desplazar e ir al estado 65
+    CONTINUE   desplazar e ir al estado 66
+    VOID       desplazar e ir al estado 26
+    ARRAY      desplazar e ir al estado 30
+    FINAL      desplazar e ir al estado 33
+
+    declaration  ir al estado 111
+    tipo         ir al estado 112
+
+
+Estado 58
+
+  102 sentenciasSwitch: SWITCH '(' • expr ')' '{' case_list '}'
+
+    FLOAD       desplazar e ir al estado 4
+    STRING      desplazar e ir al estado 5
+    ID          desplazar e ir al estado 61
+    CHAR        desplazar e ir al estado 7
+    DECIMAL     desplazar e ir al estado 8
+    NUMBER      desplazar e ir al estado 9
+    TRUE        desplazar e ir al estado 10
+    FALSE       desplazar e ir al estado 11
+    CONTINUE    desplazar e ir al estado 62
+    ARRAYS      desplazar e ir al estado 27
+    VALUEOF     desplazar e ir al estado 29
+    PARSEINT    desplazar e ir al estado 31
+    PARSEFLOAT  desplazar e ir al estado 32
+    '-'         desplazar e ir al estado 34
+    '('         desplazar e ir al estado 35
+    '!'         desplazar e ir al estado 37
+
+    expr          ir al estado 113
+    callFunction  ir al estado 49
+
+
+Estado 59
+
+   28 end: ';' •
+
+    $default  reduce usando la regla 28 (end)
+
+
+Estado 60
+
+   17 line: BREAK end •
+
+    $default  reduce usando la regla 17 (line)
+
+
+Estado 61
+
+   79 expr: ID • '[' expr ']'
+   80     | ID • '[' expr ']' '=' expr
+   86     | ID •
+   90     | ID • '[' expr ']' '[' expr ']'
+   91     | ID • '[' expr ']' '[' expr ']' '=' expr
+   97 callFunction: ID • '(' args ')'
+
+    '('  desplazar e ir al estado 52
+    '['  desplazar e ir al estado 54
+
+    '('       [reduce usando la regla 86 (expr)]
+    $default  reduce usando la regla 86 (expr)
+
+
+Estado 62
+
+   89 expr: CONTINUE •
+
+    $default  reduce usando la regla 89 (expr)
+
+
+Estado 63
+
+   19 line: RETURN end •
+
+    $default  reduce usando la regla 19 (line)
+
+
+Estado 64
+
+   18 line: RETURN expr • end
+   55 expr: expr • '+' expr
+   56     | expr • '-' expr
+   57     | expr • '*' expr
+   58     | expr • '/' expr
+   59     | expr • '%' expr
+   61     | expr • AND expr
+   62     | expr • OR expr
+   63     | expr • LE expr
+   64     | expr • GE expr
+   65     | expr • '<' expr
+   66     | expr • '>' expr
+   67     | expr • EQ expr
+   68     | expr • NEQ expr
+   69     | expr • '&' expr
+   70     | expr • '|' expr
+   71     | expr • '^' expr
+   72     | expr • SHR expr
+   73     | expr • SHL expr
+   93     | expr • '.' EQUALS '(' expr ')'
+   94     | expr • '.' LENGTH
+
+    GE   desplazar e ir al estado 84
+    LE   desplazar e ir al estado 85
+    EQ   desplazar e ir al estado 86
+    NEQ  desplazar e ir al estado 87
+    SHR  desplazar e ir al estado 88
+    SHL  desplazar e ir al estado 89
+    OR   desplazar e ir al estado 90
+    AND  desplazar e ir al estado 91
+    '>'  desplazar e ir al estado 92
+    '<'  desplazar e ir al estado 93
+    '+'  desplazar e ir al estado 94
+    '-'  desplazar e ir al estado 95
+    '*'  desplazar e ir al estado 96
+    '/'  desplazar e ir al estado 97
+    '.'  desplazar e ir al estado 98
+    ';'  desplazar e ir al estado 59
+    '%'  desplazar e ir al estado 99
+    '&'  desplazar e ir al estado 100
+    '|'  desplazar e ir al estado 101
+    '^'  desplazar e ir al estado 102
+
+    end  ir al estado 114
+
+
+Estado 65
+
+   52 tipo: BREAK •
+
+    $default  reduce usando la regla 52 (tipo)
+
+
+Estado 66
+
+   54 tipo: CONTINUE •
+
+    $default  reduce usando la regla 54 (tipo)
+
+
+Estado 67
+
+   34 function: PUBLIC STATIC • tipo ID '(' params ')' block
+
+    BOOLEAN    desplazar e ir al estado 12
+    TP_DOUBLE  desplazar e ir al estado 13
+    TP_FLOAT   desplazar e ir al estado 14
+    TP_STRING  desplazar e ir al estado 15
+    TP_CHAR    desplazar e ir al estado 16
+    INTEGER    desplazar e ir al estado 17
+    BREAK      desplazar e ir al estado 65
+    CONTINUE   desplazar e ir al estado 66
+    VOID       desplazar e ir al estado 26
+    ARRAY      desplazar e ir al estado 30
+
+    tipo  ir al estado 115
+
+
+Estado 68
+
+   33 function: PUBLIC tipo • ID '(' params ')' block
+
+    ID  desplazar e ir al estado 116
+
+
+Estado 69
+
+   92 expr: ARRAYS '.' • INDEXOF '(' expr ',' expr ')'
+
+    INDEXOF  desplazar e ir al estado 117
+
+
+Estado 70
+
+    5 line: SYSTEM '.' • OUT '.' PRINTLN '(' expr ')' end
+    6     | SYSTEM '.' • OUT '.' PRINTLN '(' ')' end
+
+    OUT  desplazar e ir al estado 118
+
+
+Estado 71
+
+   77 expr: VALUEOF '(' • expr ')'
+
+    FLOAD       desplazar e ir al estado 4
+    STRING      desplazar e ir al estado 5
+    ID          desplazar e ir al estado 61
+    CHAR        desplazar e ir al estado 7
+    DECIMAL     desplazar e ir al estado 8
+    NUMBER      desplazar e ir al estado 9
+    TRUE        desplazar e ir al estado 10
+    FALSE       desplazar e ir al estado 11
+    CONTINUE    desplazar e ir al estado 62
+    ARRAYS      desplazar e ir al estado 27
+    VALUEOF     desplazar e ir al estado 29
+    PARSEINT    desplazar e ir al estado 31
+    PARSEFLOAT  desplazar e ir al estado 32
+    '-'         desplazar e ir al estado 34
+    '('         desplazar e ir al estado 35
+    '!'         desplazar e ir al estado 37
+
+    expr          ir al estado 119
+    callFunction  ir al estado 49
+
+
+Estado 72
+
+   95 expr: PARSEINT '(' • expr ')'
+
+    FLOAD       desplazar e ir al estado 4
+    STRING      desplazar e ir al estado 5
+    ID          desplazar e ir al estado 61
+    CHAR        desplazar e ir al estado 7
+    DECIMAL     desplazar e ir al estado 8
+    NUMBER      desplazar e ir al estado 9
+    TRUE        desplazar e ir al estado 10
+    FALSE       desplazar e ir al estado 11
+    CONTINUE    desplazar e ir al estado 62
+    ARRAYS      desplazar e ir al estado 27
+    VALUEOF     desplazar e ir al estado 29
+    PARSEINT    desplazar e ir al estado 31
+    PARSEFLOAT  desplazar e ir al estado 32
+    '-'         desplazar e ir al estado 34
+    '('         desplazar e ir al estado 35
+    '!'         desplazar e ir al estado 37
+
+    expr          ir al estado 120
+    callFunction  ir al estado 49
+
+
+Estado 73
+
+   96 expr: PARSEFLOAT '(' • expr ')'
+
+    FLOAD       desplazar e ir al estado 4
+    STRING      desplazar e ir al estado 5
+    ID          desplazar e ir al estado 61
+    CHAR        desplazar e ir al estado 7
+    DECIMAL     desplazar e ir al estado 8
+    NUMBER      desplazar e ir al estado 9
+    TRUE        desplazar e ir al estado 10
+    FALSE       desplazar e ir al estado 11
+    CONTINUE    desplazar e ir al estado 62
+    ARRAYS      desplazar e ir al estado 27
+    VALUEOF     desplazar e ir al estado 29
+    PARSEINT    desplazar e ir al estado 31
+    PARSEFLOAT  desplazar e ir al estado 32
+    '-'         desplazar e ir al estado 34
+    '('         desplazar e ir al estado 35
+    '!'         desplazar e ir al estado 37
+
+    expr          ir al estado 121
+    callFunction  ir al estado 49
+
+
+Estado 74
+
+   41 declaration: FINAL tipo • ID '=' expr
+
+    ID  desplazar e ir al estado 122
+
+
+Estado 75
+
+   55 expr: expr • '+' expr
+   56     | expr • '-' expr
+   57     | expr • '*' expr
+   58     | expr • '/' expr
+   59     | expr • '%' expr
+   60     | '-' expr •
+   61     | expr • AND expr
+   62     | expr • OR expr
+   63     | expr • LE expr
+   64     | expr • GE expr
+   65     | expr • '<' expr
+   66     | expr • '>' expr
+   67     | expr • EQ expr
+   68     | expr • NEQ expr
+   69     | expr • '&' expr
+   70     | expr • '|' expr
+   71     | expr • '^' expr
+   72     | expr • SHR expr
+   73     | expr • SHL expr
+   93     | expr • '.' EQUALS '(' expr ')'
+   94     | expr • '.' LENGTH
+
+    GE   desplazar e ir al estado 84
+    LE   desplazar e ir al estado 85
+    EQ   desplazar e ir al estado 86
+    NEQ  desplazar e ir al estado 87
+    SHR  desplazar e ir al estado 88
+    SHL  desplazar e ir al estado 89
+    OR   desplazar e ir al estado 90
+    AND  desplazar e ir al estado 91
+    '.'  desplazar e ir al estado 98
+    '%'  desplazar e ir al estado 99
+    '&'  desplazar e ir al estado 100
+    '|'  desplazar e ir al estado 101
+    '^'  desplazar e ir al estado 102
+
+    GE        [reduce usando la regla 60 (expr)]
+    LE        [reduce usando la regla 60 (expr)]
+    EQ        [reduce usando la regla 60 (expr)]
+    NEQ       [reduce usando la regla 60 (expr)]
+    SHR       [reduce usando la regla 60 (expr)]
+    SHL       [reduce usando la regla 60 (expr)]
+    OR        [reduce usando la regla 60 (expr)]
+    AND       [reduce usando la regla 60 (expr)]
+    '.'       [reduce usando la regla 60 (expr)]
+    '%'       [reduce usando la regla 60 (expr)]
+    '&'       [reduce usando la regla 60 (expr)]
+    '|'       [reduce usando la regla 60 (expr)]
+    '^'       [reduce usando la regla 60 (expr)]
+    $default  reduce usando la regla 60 (expr)
+
+
+Estado 76
+
+   76 expr: '(' tipo • ')' expr
+
+    ')'  desplazar e ir al estado 123
+
+
+Estado 77
+
+   55 expr: expr • '+' expr
+   56     | expr • '-' expr
+   57     | expr • '*' expr
+   58     | expr • '/' expr
+   59     | expr • '%' expr
+   61     | expr • AND expr
+   62     | expr • OR expr
+   63     | expr • LE expr
+   64     | expr • GE expr
+   65     | expr • '<' expr
+   66     | expr • '>' expr
+   67     | expr • EQ expr
+   68     | expr • NEQ expr
+   69     | expr • '&' expr
+   70     | expr • '|' expr
+   71     | expr • '^' expr
+   72     | expr • SHR expr
+   73     | expr • SHL expr
+   75     | '(' expr • ')'
+   93     | expr • '.' EQUALS '(' expr ')'
+   94     | expr • '.' LENGTH
+
+    GE   desplazar e ir al estado 84
+    LE   desplazar e ir al estado 85
+    EQ   desplazar e ir al estado 86
+    NEQ  desplazar e ir al estado 87
+    SHR  desplazar e ir al estado 88
+    SHL  desplazar e ir al estado 89
+    OR   desplazar e ir al estado 90
+    AND  desplazar e ir al estado 91
+    '>'  desplazar e ir al estado 92
+    '<'  desplazar e ir al estado 93
+    '+'  desplazar e ir al estado 94
+    '-'  desplazar e ir al estado 95
+    '*'  desplazar e ir al estado 96
+    '/'  desplazar e ir al estado 97
+    '.'  desplazar e ir al estado 98
+    ')'  desplazar e ir al estado 124
+    '%'  desplazar e ir al estado 99
+    '&'  desplazar e ir al estado 100
+    '|'  desplazar e ir al estado 101
+    '^'  desplazar e ir al estado 102
+
+
+Estado 78
+
+    3 lines: lines • line
+   27 block: '{' lines • '}'
+
+    FLOAD       desplazar e ir al estado 4
+    STRING      desplazar e ir al estado 5
+    ID          desplazar e ir al estado 6
+    CHAR        desplazar e ir al estado 7
+    DECIMAL     desplazar e ir al estado 8
+    NUMBER      desplazar e ir al estado 9
+    TRUE        desplazar e ir al estado 10
+    FALSE       desplazar e ir al estado 11
+    BOOLEAN     desplazar e ir al estado 12
+    TP_DOUBLE   desplazar e ir al estado 13
+    TP_FLOAT    desplazar e ir al estado 14
+    TP_STRING   desplazar e ir al estado 15
+    TP_CHAR     desplazar e ir al estado 16
+    INTEGER     desplazar e ir al estado 17
+    IF          desplazar e ir al estado 18
+    WHILE       desplazar e ir al estado 19
+    FOR         desplazar e ir al estado 20
+    SWITCH      desplazar e ir al estado 21
+    BREAK       desplazar e ir al estado 22
+    CONTINUE    desplazar e ir al estado 23
+    RETURN      desplazar e ir al estado 24
+    PUBLIC      desplazar e ir al estado 25
+    VOID        desplazar e ir al estado 26
+    ARRAYS      desplazar e ir al estado 27
+    SYSTEM      desplazar e ir al estado 28
+    VALUEOF     desplazar e ir al estado 29
+    ARRAY       desplazar e ir al estado 30
+    PARSEINT    desplazar e ir al estado 31
+    PARSEFLOAT  desplazar e ir al estado 32
+    FINAL       desplazar e ir al estado 33
+    '-'         desplazar e ir al estado 34
+    '('         desplazar e ir al estado 35
+    '{'         desplazar e ir al estado 36
+    '}'         desplazar e ir al estado 125
+    '!'         desplazar e ir al estado 37
+
+    line              ir al estado 38
+    sentenciasIf      ir al estado 39
+    loopWhile         ir al estado 40
+    loopFor           ir al estado 41
+    block             ir al estado 42
+    function          ir al estado 43
+    declaration       ir al estado 44
+    assigment         ir al estado 45
+    multiDimension    ir al estado 46
+    tipo              ir al estado 47
+    expr              ir al estado 48
+    callFunction      ir al estado 49
+    sentenciasSwitch  ir al estado 50
+    larray            ir al estado 51
+
+
+Estado 79
+
+   55 expr: expr • '+' expr
+   56     | expr • '-' expr
+   57     | expr • '*' expr
+   58     | expr • '/' expr
+   59     | expr • '%' expr
+   61     | expr • AND expr
+   62     | expr • OR expr
+   63     | expr • LE expr
+   64     | expr • GE expr
+   65     | expr • '<' expr
+   66     | expr • '>' expr
+   67     | expr • EQ expr
+   68     | expr • NEQ expr
+   69     | expr • '&' expr
+   70     | expr • '|' expr
+   71     | expr • '^' expr
+   72     | expr • SHR expr
+   73     | expr • SHL expr
+   74     | '!' expr •
+   93     | expr • '.' EQUALS '(' expr ')'
+   94     | expr • '.' LENGTH
+
+    GE   desplazar e ir al estado 84
+    LE   desplazar e ir al estado 85
+    EQ   desplazar e ir al estado 86
+    NEQ  desplazar e ir al estado 87
+    SHR  desplazar e ir al estado 88
+    SHL  desplazar e ir al estado 89
+    OR   desplazar e ir al estado 90
+    AND  desplazar e ir al estado 91
+    '>'  desplazar e ir al estado 92
+    '<'  desplazar e ir al estado 93
+    '+'  desplazar e ir al estado 94
+    '-'  desplazar e ir al estado 95
+    '*'  desplazar e ir al estado 96
+    '/'  desplazar e ir al estado 97
+    '.'  desplazar e ir al estado 98
+    '%'  desplazar e ir al estado 99
+    '&'  desplazar e ir al estado 100
+    '|'  desplazar e ir al estado 101
+    '^'  desplazar e ir al estado 102
+
+    GE        [reduce usando la regla 74 (expr)]
+    LE        [reduce usando la regla 74 (expr)]
+    EQ        [reduce usando la regla 74 (expr)]
+    NEQ       [reduce usando la regla 74 (expr)]
+    SHR       [reduce usando la regla 74 (expr)]
+    SHL       [reduce usando la regla 74 (expr)]
+    OR        [reduce usando la regla 74 (expr)]
+    AND       [reduce usando la regla 74 (expr)]
+    '>'       [reduce usando la regla 74 (expr)]
+    '<'       [reduce usando la regla 74 (expr)]
+    '+'       [reduce usando la regla 74 (expr)]
+    '-'       [reduce usando la regla 74 (expr)]
+    '*'       [reduce usando la regla 74 (expr)]
+    '/'       [reduce usando la regla 74 (expr)]
+    '.'       [reduce usando la regla 74 (expr)]
+    '%'       [reduce usando la regla 74 (expr)]
+    '&'       [reduce usando la regla 74 (expr)]
+    '|'       [reduce usando la regla 74 (expr)]
+    '^'       [reduce usando la regla 74 (expr)]
+    $default  reduce usando la regla 74 (expr)
+
+
+Estado 80
+
+    7 line: declaration end •
+
+    $default  reduce usando la regla 7 (line)
+
+
+Estado 81
+
+    9 line: assigment end •
+
+    $default  reduce usando la regla 9 (line)
+
+
+Estado 82
+
+   39 declaration: tipo ID • '=' expr
+   40            | tipo ID •
+
+    '='  desplazar e ir al estado 126
+
+    $default  reduce usando la regla 40 (declaration)
+
+
+Estado 83
+
+   43 multiDimension: tipo '[' • ']' '[' ']' ID '=' NEW tipo '[' expr ']' '[' expr ']' end
+   44               | tipo '[' • ']' '[' ']' ID '=' '{' elementos '}' end
+  107 larray: tipo '[' • ']' ID '=' NEW tipo '[' expr ']' end
+  108       | tipo '[' • ']' ID '=' '{' elementos '}' end
+  109       | tipo '[' • ']' ID '=' ID '.' ADD '(' expr ')' end
+
+    ']'  desplazar e ir al estado 127
+
+
+Estado 84
+
+   64 expr: expr GE • expr
+
+    FLOAD       desplazar e ir al estado 4
+    STRING      desplazar e ir al estado 5
+    ID          desplazar e ir al estado 61
+    CHAR        desplazar e ir al estado 7
+    DECIMAL     desplazar e ir al estado 8
+    NUMBER      desplazar e ir al estado 9
+    TRUE        desplazar e ir al estado 10
+    FALSE       desplazar e ir al estado 11
+    CONTINUE    desplazar e ir al estado 62
+    ARRAYS      desplazar e ir al estado 27
+    VALUEOF     desplazar e ir al estado 29
+    PARSEINT    desplazar e ir al estado 31
+    PARSEFLOAT  desplazar e ir al estado 32
+    '-'         desplazar e ir al estado 34
+    '('         desplazar e ir al estado 35
+    '!'         desplazar e ir al estado 37
+
+    expr          ir al estado 128
+    callFunction  ir al estado 49
+
+
+Estado 85
+
+   63 expr: expr LE • expr
+
+    FLOAD       desplazar e ir al estado 4
+    STRING      desplazar e ir al estado 5
+    ID          desplazar e ir al estado 61
+    CHAR        desplazar e ir al estado 7
+    DECIMAL     desplazar e ir al estado 8
+    NUMBER      desplazar e ir al estado 9
+    TRUE        desplazar e ir al estado 10
+    FALSE       desplazar e ir al estado 11
+    CONTINUE    desplazar e ir al estado 62
+    ARRAYS      desplazar e ir al estado 27
+    VALUEOF     desplazar e ir al estado 29
+    PARSEINT    desplazar e ir al estado 31
+    PARSEFLOAT  desplazar e ir al estado 32
+    '-'         desplazar e ir al estado 34
+    '('         desplazar e ir al estado 35
+    '!'         desplazar e ir al estado 37
+
+    expr          ir al estado 129
+    callFunction  ir al estado 49
+
+
+Estado 86
+
+   67 expr: expr EQ • expr
+
+    FLOAD       desplazar e ir al estado 4
+    STRING      desplazar e ir al estado 5
+    ID          desplazar e ir al estado 61
+    CHAR        desplazar e ir al estado 7
+    DECIMAL     desplazar e ir al estado 8
+    NUMBER      desplazar e ir al estado 9
+    TRUE        desplazar e ir al estado 10
+    FALSE       desplazar e ir al estado 11
+    CONTINUE    desplazar e ir al estado 62
+    ARRAYS      desplazar e ir al estado 27
+    VALUEOF     desplazar e ir al estado 29
+    PARSEINT    desplazar e ir al estado 31
+    PARSEFLOAT  desplazar e ir al estado 32
+    '-'         desplazar e ir al estado 34
+    '('         desplazar e ir al estado 35
+    '!'         desplazar e ir al estado 37
+
+    expr          ir al estado 130
+    callFunction  ir al estado 49
+
+
+Estado 87
+
+   68 expr: expr NEQ • expr
+
+    FLOAD       desplazar e ir al estado 4
+    STRING      desplazar e ir al estado 5
+    ID          desplazar e ir al estado 61
+    CHAR        desplazar e ir al estado 7
+    DECIMAL     desplazar e ir al estado 8
+    NUMBER      desplazar e ir al estado 9
+    TRUE        desplazar e ir al estado 10
+    FALSE       desplazar e ir al estado 11
+    CONTINUE    desplazar e ir al estado 62
+    ARRAYS      desplazar e ir al estado 27
+    VALUEOF     desplazar e ir al estado 29
+    PARSEINT    desplazar e ir al estado 31
+    PARSEFLOAT  desplazar e ir al estado 32
+    '-'         desplazar e ir al estado 34
+    '('         desplazar e ir al estado 35
+    '!'         desplazar e ir al estado 37
+
+    expr          ir al estado 131
+    callFunction  ir al estado 49
+
+
+Estado 88
+
+   72 expr: expr SHR • expr
+
+    FLOAD       desplazar e ir al estado 4
+    STRING      desplazar e ir al estado 5
+    ID          desplazar e ir al estado 61
+    CHAR        desplazar e ir al estado 7
+    DECIMAL     desplazar e ir al estado 8
+    NUMBER      desplazar e ir al estado 9
+    TRUE        desplazar e ir al estado 10
+    FALSE       desplazar e ir al estado 11
+    CONTINUE    desplazar e ir al estado 62
+    ARRAYS      desplazar e ir al estado 27
+    VALUEOF     desplazar e ir al estado 29
+    PARSEINT    desplazar e ir al estado 31
+    PARSEFLOAT  desplazar e ir al estado 32
+    '-'         desplazar e ir al estado 34
+    '('         desplazar e ir al estado 35
+    '!'         desplazar e ir al estado 37
+
+    expr          ir al estado 132
+    callFunction  ir al estado 49
+
+
+Estado 89
+
+   73 expr: expr SHL • expr
+
+    FLOAD       desplazar e ir al estado 4
+    STRING      desplazar e ir al estado 5
+    ID          desplazar e ir al estado 61
+    CHAR        desplazar e ir al estado 7
+    DECIMAL     desplazar e ir al estado 8
+    NUMBER      desplazar e ir al estado 9
+    TRUE        desplazar e ir al estado 10
+    FALSE       desplazar e ir al estado 11
+    CONTINUE    desplazar e ir al estado 62
+    ARRAYS      desplazar e ir al estado 27
+    VALUEOF     desplazar e ir al estado 29
+    PARSEINT    desplazar e ir al estado 31
+    PARSEFLOAT  desplazar e ir al estado 32
+    '-'         desplazar e ir al estado 34
+    '('         desplazar e ir al estado 35
+    '!'         desplazar e ir al estado 37
+
+    expr          ir al estado 133
+    callFunction  ir al estado 49
+
+
+Estado 90
+
+   62 expr: expr OR • expr
+
+    FLOAD       desplazar e ir al estado 4
+    STRING      desplazar e ir al estado 5
+    ID          desplazar e ir al estado 61
+    CHAR        desplazar e ir al estado 7
+    DECIMAL     desplazar e ir al estado 8
+    NUMBER      desplazar e ir al estado 9
+    TRUE        desplazar e ir al estado 10
+    FALSE       desplazar e ir al estado 11
+    CONTINUE    desplazar e ir al estado 62
+    ARRAYS      desplazar e ir al estado 27
+    VALUEOF     desplazar e ir al estado 29
+    PARSEINT    desplazar e ir al estado 31
+    PARSEFLOAT  desplazar e ir al estado 32
+    '-'         desplazar e ir al estado 34
+    '('         desplazar e ir al estado 35
+    '!'         desplazar e ir al estado 37
+
+    expr          ir al estado 134
+    callFunction  ir al estado 49
+
+
+Estado 91
+
+   61 expr: expr AND • expr
+
+    FLOAD       desplazar e ir al estado 4
+    STRING      desplazar e ir al estado 5
+    ID          desplazar e ir al estado 61
+    CHAR        desplazar e ir al estado 7
+    DECIMAL     desplazar e ir al estado 8
+    NUMBER      desplazar e ir al estado 9
+    TRUE        desplazar e ir al estado 10
+    FALSE       desplazar e ir al estado 11
+    CONTINUE    desplazar e ir al estado 62
+    ARRAYS      desplazar e ir al estado 27
+    VALUEOF     desplazar e ir al estado 29
+    PARSEINT    desplazar e ir al estado 31
+    PARSEFLOAT  desplazar e ir al estado 32
+    '-'         desplazar e ir al estado 34
+    '('         desplazar e ir al estado 35
+    '!'         desplazar e ir al estado 37
+
+    expr          ir al estado 135
+    callFunction  ir al estado 49
+
+
+Estado 92
+
+   66 expr: expr '>' • expr
+
+    FLOAD       desplazar e ir al estado 4
+    STRING      desplazar e ir al estado 5
+    ID          desplazar e ir al estado 61
+    CHAR        desplazar e ir al estado 7
+    DECIMAL     desplazar e ir al estado 8
+    NUMBER      desplazar e ir al estado 9
+    TRUE        desplazar e ir al estado 10
+    FALSE       desplazar e ir al estado 11
+    CONTINUE    desplazar e ir al estado 62
+    ARRAYS      desplazar e ir al estado 27
+    VALUEOF     desplazar e ir al estado 29
+    PARSEINT    desplazar e ir al estado 31
+    PARSEFLOAT  desplazar e ir al estado 32
+    '-'         desplazar e ir al estado 34
+    '('         desplazar e ir al estado 35
+    '!'         desplazar e ir al estado 37
+
+    expr          ir al estado 136
+    callFunction  ir al estado 49
+
+
+Estado 93
+
+   65 expr: expr '<' • expr
+
+    FLOAD       desplazar e ir al estado 4
+    STRING      desplazar e ir al estado 5
+    ID          desplazar e ir al estado 61
+    CHAR        desplazar e ir al estado 7
+    DECIMAL     desplazar e ir al estado 8
+    NUMBER      desplazar e ir al estado 9
+    TRUE        desplazar e ir al estado 10
+    FALSE       desplazar e ir al estado 11
+    CONTINUE    desplazar e ir al estado 62
+    ARRAYS      desplazar e ir al estado 27
+    VALUEOF     desplazar e ir al estado 29
+    PARSEINT    desplazar e ir al estado 31
+    PARSEFLOAT  desplazar e ir al estado 32
+    '-'         desplazar e ir al estado 34
+    '('         desplazar e ir al estado 35
+    '!'         desplazar e ir al estado 37
+
+    expr          ir al estado 137
+    callFunction  ir al estado 49
+
+
+Estado 94
+
+   55 expr: expr '+' • expr
+
+    FLOAD       desplazar e ir al estado 4
+    STRING      desplazar e ir al estado 5
+    ID          desplazar e ir al estado 61
+    CHAR        desplazar e ir al estado 7
+    DECIMAL     desplazar e ir al estado 8
+    NUMBER      desplazar e ir al estado 9
+    TRUE        desplazar e ir al estado 10
+    FALSE       desplazar e ir al estado 11
+    CONTINUE    desplazar e ir al estado 62
+    ARRAYS      desplazar e ir al estado 27
+    VALUEOF     desplazar e ir al estado 29
+    PARSEINT    desplazar e ir al estado 31
+    PARSEFLOAT  desplazar e ir al estado 32
+    '-'         desplazar e ir al estado 34
+    '('         desplazar e ir al estado 35
+    '!'         desplazar e ir al estado 37
+
+    expr          ir al estado 138
+    callFunction  ir al estado 49
+
+
+Estado 95
+
+   56 expr: expr '-' • expr
+
+    FLOAD       desplazar e ir al estado 4
+    STRING      desplazar e ir al estado 5
+    ID          desplazar e ir al estado 61
+    CHAR        desplazar e ir al estado 7
+    DECIMAL     desplazar e ir al estado 8
+    NUMBER      desplazar e ir al estado 9
+    TRUE        desplazar e ir al estado 10
+    FALSE       desplazar e ir al estado 11
+    CONTINUE    desplazar e ir al estado 62
+    ARRAYS      desplazar e ir al estado 27
+    VALUEOF     desplazar e ir al estado 29
+    PARSEINT    desplazar e ir al estado 31
+    PARSEFLOAT  desplazar e ir al estado 32
+    '-'         desplazar e ir al estado 34
+    '('         desplazar e ir al estado 35
+    '!'         desplazar e ir al estado 37
+
+    expr          ir al estado 139
+    callFunction  ir al estado 49
+
+
+Estado 96
+
+   57 expr: expr '*' • expr
+
+    FLOAD       desplazar e ir al estado 4
+    STRING      desplazar e ir al estado 5
+    ID          desplazar e ir al estado 61
+    CHAR        desplazar e ir al estado 7
+    DECIMAL     desplazar e ir al estado 8
+    NUMBER      desplazar e ir al estado 9
+    TRUE        desplazar e ir al estado 10
+    FALSE       desplazar e ir al estado 11
+    CONTINUE    desplazar e ir al estado 62
+    ARRAYS      desplazar e ir al estado 27
+    VALUEOF     desplazar e ir al estado 29
+    PARSEINT    desplazar e ir al estado 31
+    PARSEFLOAT  desplazar e ir al estado 32
+    '-'         desplazar e ir al estado 34
+    '('         desplazar e ir al estado 35
+    '!'         desplazar e ir al estado 37
+
+    expr          ir al estado 140
+    callFunction  ir al estado 49
+
+
+Estado 97
+
+   58 expr: expr '/' • expr
+
+    FLOAD       desplazar e ir al estado 4
+    STRING      desplazar e ir al estado 5
+    ID          desplazar e ir al estado 61
+    CHAR        desplazar e ir al estado 7
+    DECIMAL     desplazar e ir al estado 8
+    NUMBER      desplazar e ir al estado 9
+    TRUE        desplazar e ir al estado 10
+    FALSE       desplazar e ir al estado 11
+    CONTINUE    desplazar e ir al estado 62
+    ARRAYS      desplazar e ir al estado 27
+    VALUEOF     desplazar e ir al estado 29
+    PARSEINT    desplazar e ir al estado 31
+    PARSEFLOAT  desplazar e ir al estado 32
+    '-'         desplazar e ir al estado 34
+    '('         desplazar e ir al estado 35
+    '!'         desplazar e ir al estado 37
+
+    expr          ir al estado 141
+    callFunction  ir al estado 49
+
+
+Estado 98
+
+   93 expr: expr '.' • EQUALS '(' expr ')'
+   94     | expr '.' • LENGTH
+
+    EQUALS  desplazar e ir al estado 142
+    LENGTH  desplazar e ir al estado 143
+
+
+Estado 99
+
+   59 expr: expr '%' • expr
+
+    FLOAD       desplazar e ir al estado 4
+    STRING      desplazar e ir al estado 5
+    ID          desplazar e ir al estado 61
+    CHAR        desplazar e ir al estado 7
+    DECIMAL     desplazar e ir al estado 8
+    NUMBER      desplazar e ir al estado 9
+    TRUE        desplazar e ir al estado 10
+    FALSE       desplazar e ir al estado 11
+    CONTINUE    desplazar e ir al estado 62
+    ARRAYS      desplazar e ir al estado 27
+    VALUEOF     desplazar e ir al estado 29
+    PARSEINT    desplazar e ir al estado 31
+    PARSEFLOAT  desplazar e ir al estado 32
+    '-'         desplazar e ir al estado 34
+    '('         desplazar e ir al estado 35
+    '!'         desplazar e ir al estado 37
+
+    expr          ir al estado 144
+    callFunction  ir al estado 49
+
+
+Estado 100
+
+   69 expr: expr '&' • expr
+
+    FLOAD       desplazar e ir al estado 4
+    STRING      desplazar e ir al estado 5
+    ID          desplazar e ir al estado 61
+    CHAR        desplazar e ir al estado 7
+    DECIMAL     desplazar e ir al estado 8
+    NUMBER      desplazar e ir al estado 9
+    TRUE        desplazar e ir al estado 10
+    FALSE       desplazar e ir al estado 11
+    CONTINUE    desplazar e ir al estado 62
+    ARRAYS      desplazar e ir al estado 27
+    VALUEOF     desplazar e ir al estado 29
+    PARSEINT    desplazar e ir al estado 31
+    PARSEFLOAT  desplazar e ir al estado 32
+    '-'         desplazar e ir al estado 34
+    '('         desplazar e ir al estado 35
+    '!'         desplazar e ir al estado 37
+
+    expr          ir al estado 145
+    callFunction  ir al estado 49
+
+
+Estado 101
+
+   70 expr: expr '|' • expr
+
+    FLOAD       desplazar e ir al estado 4
+    STRING      desplazar e ir al estado 5
+    ID          desplazar e ir al estado 61
+    CHAR        desplazar e ir al estado 7
+    DECIMAL     desplazar e ir al estado 8
+    NUMBER      desplazar e ir al estado 9
+    TRUE        desplazar e ir al estado 10
+    FALSE       desplazar e ir al estado 11
+    CONTINUE    desplazar e ir al estado 62
+    ARRAYS      desplazar e ir al estado 27
+    VALUEOF     desplazar e ir al estado 29
+    PARSEINT    desplazar e ir al estado 31
+    PARSEFLOAT  desplazar e ir al estado 32
+    '-'         desplazar e ir al estado 34
+    '('         desplazar e ir al estado 35
+    '!'         desplazar e ir al estado 37
+
+    expr          ir al estado 146
+    callFunction  ir al estado 49
+
+
+Estado 102
+
+   71 expr: expr '^' • expr
+
+    FLOAD       desplazar e ir al estado 4
+    STRING      desplazar e ir al estado 5
+    ID          desplazar e ir al estado 61
+    CHAR        desplazar e ir al estado 7
+    DECIMAL     desplazar e ir al estado 8
+    NUMBER      desplazar e ir al estado 9
+    TRUE        desplazar e ir al estado 10
+    FALSE       desplazar e ir al estado 11
+    CONTINUE    desplazar e ir al estado 62
+    ARRAYS      desplazar e ir al estado 27
+    VALUEOF     desplazar e ir al estado 29
+    PARSEINT    desplazar e ir al estado 31
+    PARSEFLOAT  desplazar e ir al estado 32
+    '-'         desplazar e ir al estado 34
+    '('         desplazar e ir al estado 35
+    '!'         desplazar e ir al estado 37
+
+    expr          ir al estado 147
+    callFunction  ir al estado 49
+
+
+Estado 103
+
+    4 line: expr end •
+
+    $default  reduce usando la regla 4 (line)
+
+
+Estado 104
+
+   55 expr: expr • '+' expr
+   56     | expr • '-' expr
+   57     | expr • '*' expr
+   58     | expr • '/' expr
+   59     | expr • '%' expr
+   61     | expr • AND expr
+   62     | expr • OR expr
+   63     | expr • LE expr
+   64     | expr • GE expr
+   65     | expr • '<' expr
+   66     | expr • '>' expr
+   67     | expr • EQ expr
+   68     | expr • NEQ expr
+   69     | expr • '&' expr
+   70     | expr • '|' expr
+   71     | expr • '^' expr
+   72     | expr • SHR expr
+   73     | expr • SHL expr
+   93     | expr • '.' EQUALS '(' expr ')'
+   94     | expr • '.' LENGTH
+  100 arglist: expr •
+  101        | expr • ',' arglist
+
+    GE   desplazar e ir al estado 84
+    LE   desplazar e ir al estado 85
+    EQ   desplazar e ir al estado 86
+    NEQ  desplazar e ir al estado 87
+    SHR  desplazar e ir al estado 88
+    SHL  desplazar e ir al estado 89
+    OR   desplazar e ir al estado 90
+    AND  desplazar e ir al estado 91
+    '>'  desplazar e ir al estado 92
+    '<'  desplazar e ir al estado 93
+    '+'  desplazar e ir al estado 94
+    '-'  desplazar e ir al estado 95
+    '*'  desplazar e ir al estado 96
+    '/'  desplazar e ir al estado 97
+    '.'  desplazar e ir al estado 98
+    ','  desplazar e ir al estado 148
+    '%'  desplazar e ir al estado 99
+    '&'  desplazar e ir al estado 100
+    '|'  desplazar e ir al estado 101
+    '^'  desplazar e ir al estado 102
+
+    $default  reduce usando la regla 100 (arglist)
+
+
+Estado 105
+
+   97 callFunction: ID '(' args • ')'
+
+    ')'  desplazar e ir al estado 149
+
+
+Estado 106
+
+   99 args: arglist •
+
+    $default  reduce usando la regla 99 (args)
+
+
+Estado 107
+
+   42 assigment: ID '=' expr •
+   55 expr: expr • '+' expr
+   56     | expr • '-' expr
+   57     | expr • '*' expr
+   58     | expr • '/' expr
+   59     | expr • '%' expr
+   61     | expr • AND expr
+   62     | expr • OR expr
+   63     | expr • LE expr
+   64     | expr • GE expr
+   65     | expr • '<' expr
+   66     | expr • '>' expr
+   67     | expr • EQ expr
+   68     | expr • NEQ expr
+   69     | expr • '&' expr
+   70     | expr • '|' expr
+   71     | expr • '^' expr
+   72     | expr • SHR expr
+   73     | expr • SHL expr
+   93     | expr • '.' EQUALS '(' expr ')'
+   94     | expr • '.' LENGTH
+
+    GE   desplazar e ir al estado 84
+    LE   desplazar e ir al estado 85
+    EQ   desplazar e ir al estado 86
+    NEQ  desplazar e ir al estado 87
+    SHR  desplazar e ir al estado 88
+    SHL  desplazar e ir al estado 89
+    OR   desplazar e ir al estado 90
+    AND  desplazar e ir al estado 91
+    '>'  desplazar e ir al estado 92
+    '<'  desplazar e ir al estado 93
+    '+'  desplazar e ir al estado 94
+    '-'  desplazar e ir al estado 95
+    '*'  desplazar e ir al estado 96
+    '/'  desplazar e ir al estado 97
+    '.'  desplazar e ir al estado 98
+    '%'  desplazar e ir al estado 99
+    '&'  desplazar e ir al estado 100
+    '|'  desplazar e ir al estado 101
+    '^'  desplazar e ir al estado 102
+
+    '-'       [reduce usando la regla 42 (assigment)]
+    $default  reduce usando la regla 42 (assigment)
+
+
+Estado 108
+
+   55 expr: expr • '+' expr
+   56     | expr • '-' expr
+   57     | expr • '*' expr
+   58     | expr • '/' expr
+   59     | expr • '%' expr
+   61     | expr • AND expr
+   62     | expr • OR expr
+   63     | expr • LE expr
+   64     | expr • GE expr
+   65     | expr • '<' expr
+   66     | expr • '>' expr
+   67     | expr • EQ expr
+   68     | expr • NEQ expr
+   69     | expr • '&' expr
+   70     | expr • '|' expr
+   71     | expr • '^' expr
+   72     | expr • SHR expr
+   73     | expr • SHL expr
+   79     | ID '[' expr • ']'
+   80     | ID '[' expr • ']' '=' expr
+   90     | ID '[' expr • ']' '[' expr ']'
+   91     | ID '[' expr • ']' '[' expr ']' '=' expr
+   93     | expr • '.' EQUALS '(' expr ')'
+   94     | expr • '.' LENGTH
+
+    GE   desplazar e ir al estado 84
+    LE   desplazar e ir al estado 85
+    EQ   desplazar e ir al estado 86
+    NEQ  desplazar e ir al estado 87
+    SHR  desplazar e ir al estado 88
+    SHL  desplazar e ir al estado 89
+    OR   desplazar e ir al estado 90
+    AND  desplazar e ir al estado 91
+    '>'  desplazar e ir al estado 92
+    '<'  desplazar e ir al estado 93
+    '+'  desplazar e ir al estado 94
+    '-'  desplazar e ir al estado 95
+    '*'  desplazar e ir al estado 96
+    '/'  desplazar e ir al estado 97
+    '.'  desplazar e ir al estado 98
+    ']'  desplazar e ir al estado 150
+    '%'  desplazar e ir al estado 99
+    '&'  desplazar e ir al estado 100
+    '|'  desplazar e ir al estado 101
+    '^'  desplazar e ir al estado 102
+
+
+Estado 109
+
+   22 sentenciasIf: IF '(' expr • ')' block
+   23             | IF '(' expr • ')' block ELSE block
+   55 expr: expr • '+' expr
+   56     | expr • '-' expr
+   57     | expr • '*' expr
+   58     | expr • '/' expr
+   59     | expr • '%' expr
+   61     | expr • AND expr
+   62     | expr • OR expr
+   63     | expr • LE expr
+   64     | expr • GE expr
+   65     | expr • '<' expr
+   66     | expr • '>' expr
+   67     | expr • EQ expr
+   68     | expr • NEQ expr
+   69     | expr • '&' expr
+   70     | expr • '|' expr
+   71     | expr • '^' expr
+   72     | expr • SHR expr
+   73     | expr • SHL expr
+   93     | expr • '.' EQUALS '(' expr ')'
+   94     | expr • '.' LENGTH
+
+    GE   desplazar e ir al estado 84
+    LE   desplazar e ir al estado 85
+    EQ   desplazar e ir al estado 86
+    NEQ  desplazar e ir al estado 87
+    SHR  desplazar e ir al estado 88
+    SHL  desplazar e ir al estado 89
+    OR   desplazar e ir al estado 90
+    AND  desplazar e ir al estado 91
+    '>'  desplazar e ir al estado 92
+    '<'  desplazar e ir al estado 93
+    '+'  desplazar e ir al estado 94
+    '-'  desplazar e ir al estado 95
+    '*'  desplazar e ir al estado 96
+    '/'  desplazar e ir al estado 97
+    '.'  desplazar e ir al estado 98
+    ')'  desplazar e ir al estado 151
+    '%'  desplazar e ir al estado 99
+    '&'  desplazar e ir al estado 100
+    '|'  desplazar e ir al estado 101
+    '^'  desplazar e ir al estado 102
+
+
+Estado 110
+
+   24 loopWhile: WHILE '(' expr • ')' block
+   55 expr: expr • '+' expr
+   56     | expr • '-' expr
+   57     | expr • '*' expr
+   58     | expr • '/' expr
+   59     | expr • '%' expr
+   61     | expr • AND expr
+   62     | expr • OR expr
+   63     | expr • LE expr
+   64     | expr • GE expr
+   65     | expr • '<' expr
+   66     | expr • '>' expr
+   67     | expr • EQ expr
+   68     | expr • NEQ expr
+   69     | expr • '&' expr
+   70     | expr • '|' expr
+   71     | expr • '^' expr
+   72     | expr • SHR expr
+   73     | expr • SHL expr
+   93     | expr • '.' EQUALS '(' expr ')'
+   94     | expr • '.' LENGTH
+
+    GE   desplazar e ir al estado 84
+    LE   desplazar e ir al estado 85
+    EQ   desplazar e ir al estado 86
+    NEQ  desplazar e ir al estado 87
+    SHR  desplazar e ir al estado 88
+    SHL  desplazar e ir al estado 89
+    OR   desplazar e ir al estado 90
+    AND  desplazar e ir al estado 91
+    '>'  desplazar e ir al estado 92
+    '<'  desplazar e ir al estado 93
+    '+'  desplazar e ir al estado 94
+    '-'  desplazar e ir al estado 95
+    '*'  desplazar e ir al estado 96
+    '/'  desplazar e ir al estado 97
+    '.'  desplazar e ir al estado 98
+    ')'  desplazar e ir al estado 152
+    '%'  desplazar e ir al estado 99
+    '&'  desplazar e ir al estado 100
+    '|'  desplazar e ir al estado 101
+    '^'  desplazar e ir al estado 102
+
+
+Estado 111
+
+   25 loopFor: FOR '(' declaration • end expr end assigment ')' block
+
+    ';'  desplazar e ir al estado 59
+
+    end  ir al estado 153
+
+
+Estado 112
+
+   26 loopFor: FOR '(' tipo • ID DOSPUNTOS ID ')' block
+   39 declaration: tipo • ID '=' expr
+   40            | tipo • ID
+
+    ID  desplazar e ir al estado 154
+
+
+Estado 113
+
+   55 expr: expr • '+' expr
+   56     | expr • '-' expr
+   57     | expr • '*' expr
+   58     | expr • '/' expr
+   59     | expr • '%' expr
+   61     | expr • AND expr
+   62     | expr • OR expr
+   63     | expr • LE expr
+   64     | expr • GE expr
+   65     | expr • '<' expr
+   66     | expr • '>' expr
+   67     | expr • EQ expr
+   68     | expr • NEQ expr
+   69     | expr • '&' expr
+   70     | expr • '|' expr
+   71     | expr • '^' expr
+   72     | expr • SHR expr
+   73     | expr • SHL expr
+   93     | expr • '.' EQUALS '(' expr ')'
+   94     | expr • '.' LENGTH
+  102 sentenciasSwitch: SWITCH '(' expr • ')' '{' case_list '}'
+
+    GE   desplazar e ir al estado 84
+    LE   desplazar e ir al estado 85
+    EQ   desplazar e ir al estado 86
+    NEQ  desplazar e ir al estado 87
+    SHR  desplazar e ir al estado 88
+    SHL  desplazar e ir al estado 89
+    OR   desplazar e ir al estado 90
+    AND  desplazar e ir al estado 91
+    '>'  desplazar e ir al estado 92
+    '<'  desplazar e ir al estado 93
+    '+'  desplazar e ir al estado 94
+    '-'  desplazar e ir al estado 95
+    '*'  desplazar e ir al estado 96
+    '/'  desplazar e ir al estado 97
+    '.'  desplazar e ir al estado 98
+    ')'  desplazar e ir al estado 155
+    '%'  desplazar e ir al estado 99
+    '&'  desplazar e ir al estado 100
+    '|'  desplazar e ir al estado 101
+    '^'  desplazar e ir al estado 102
+
+
+Estado 114
+
+   18 line: RETURN expr end •
+
+    $default  reduce usando la regla 18 (line)
+
+
+Estado 115
+
+   34 function: PUBLIC STATIC tipo • ID '(' params ')' block
+
+    ID  desplazar e ir al estado 156
+
+
+Estado 116
+
+   33 function: PUBLIC tipo ID • '(' params ')' block
+
+    '('  desplazar e ir al estado 157
+
+
+Estado 117
+
+   92 expr: ARRAYS '.' INDEXOF • '(' expr ',' expr ')'
+
+    '('  desplazar e ir al estado 158
+
+
+Estado 118
+
+    5 line: SYSTEM '.' OUT • '.' PRINTLN '(' expr ')' end
+    6     | SYSTEM '.' OUT • '.' PRINTLN '(' ')' end
+
+    '.'  desplazar e ir al estado 159
+
+
+Estado 119
+
+   55 expr: expr • '+' expr
+   56     | expr • '-' expr
+   57     | expr • '*' expr
+   58     | expr • '/' expr
+   59     | expr • '%' expr
+   61     | expr • AND expr
+   62     | expr • OR expr
+   63     | expr • LE expr
+   64     | expr • GE expr
+   65     | expr • '<' expr
+   66     | expr • '>' expr
+   67     | expr • EQ expr
+   68     | expr • NEQ expr
+   69     | expr • '&' expr
+   70     | expr • '|' expr
+   71     | expr • '^' expr
+   72     | expr • SHR expr
+   73     | expr • SHL expr
+   77     | VALUEOF '(' expr • ')'
+   93     | expr • '.' EQUALS '(' expr ')'
+   94     | expr • '.' LENGTH
+
+    GE   desplazar e ir al estado 84
+    LE   desplazar e ir al estado 85
+    EQ   desplazar e ir al estado 86
+    NEQ  desplazar e ir al estado 87
+    SHR  desplazar e ir al estado 88
+    SHL  desplazar e ir al estado 89
+    OR   desplazar e ir al estado 90
+    AND  desplazar e ir al estado 91
+    '>'  desplazar e ir al estado 92
+    '<'  desplazar e ir al estado 93
+    '+'  desplazar e ir al estado 94
+    '-'  desplazar e ir al estado 95
+    '*'  desplazar e ir al estado 96
+    '/'  desplazar e ir al estado 97
+    '.'  desplazar e ir al estado 98
+    ')'  desplazar e ir al estado 160
+    '%'  desplazar e ir al estado 99
+    '&'  desplazar e ir al estado 100
+    '|'  desplazar e ir al estado 101
+    '^'  desplazar e ir al estado 102
+
+
+Estado 120
+
+   55 expr: expr • '+' expr
+   56     | expr • '-' expr
+   57     | expr • '*' expr
+   58     | expr • '/' expr
+   59     | expr • '%' expr
+   61     | expr • AND expr
+   62     | expr • OR expr
+   63     | expr • LE expr
+   64     | expr • GE expr
+   65     | expr • '<' expr
+   66     | expr • '>' expr
+   67     | expr • EQ expr
+   68     | expr • NEQ expr
+   69     | expr • '&' expr
+   70     | expr • '|' expr
+   71     | expr • '^' expr
+   72     | expr • SHR expr
+   73     | expr • SHL expr
+   93     | expr • '.' EQUALS '(' expr ')'
+   94     | expr • '.' LENGTH
+   95     | PARSEINT '(' expr • ')'
+
+    GE   desplazar e ir al estado 84
+    LE   desplazar e ir al estado 85
+    EQ   desplazar e ir al estado 86
+    NEQ  desplazar e ir al estado 87
+    SHR  desplazar e ir al estado 88
+    SHL  desplazar e ir al estado 89
+    OR   desplazar e ir al estado 90
+    AND  desplazar e ir al estado 91
+    '>'  desplazar e ir al estado 92
+    '<'  desplazar e ir al estado 93
+    '+'  desplazar e ir al estado 94
+    '-'  desplazar e ir al estado 95
+    '*'  desplazar e ir al estado 96
+    '/'  desplazar e ir al estado 97
+    '.'  desplazar e ir al estado 98
+    ')'  desplazar e ir al estado 161
+    '%'  desplazar e ir al estado 99
+    '&'  desplazar e ir al estado 100
+    '|'  desplazar e ir al estado 101
+    '^'  desplazar e ir al estado 102
+
+
+Estado 121
+
+   55 expr: expr • '+' expr
+   56     | expr • '-' expr
+   57     | expr • '*' expr
+   58     | expr • '/' expr
+   59     | expr • '%' expr
+   61     | expr • AND expr
+   62     | expr • OR expr
+   63     | expr • LE expr
+   64     | expr • GE expr
+   65     | expr • '<' expr
+   66     | expr • '>' expr
+   67     | expr • EQ expr
+   68     | expr • NEQ expr
+   69     | expr • '&' expr
+   70     | expr • '|' expr
+   71     | expr • '^' expr
+   72     | expr • SHR expr
+   73     | expr • SHL expr
+   93     | expr • '.' EQUALS '(' expr ')'
+   94     | expr • '.' LENGTH
+   96     | PARSEFLOAT '(' expr • ')'
+
+    GE   desplazar e ir al estado 84
+    LE   desplazar e ir al estado 85
+    EQ   desplazar e ir al estado 86
+    NEQ  desplazar e ir al estado 87
+    SHR  desplazar e ir al estado 88
+    SHL  desplazar e ir al estado 89
+    OR   desplazar e ir al estado 90
+    AND  desplazar e ir al estado 91
+    '>'  desplazar e ir al estado 92
+    '<'  desplazar e ir al estado 93
+    '+'  desplazar e ir al estado 94
+    '-'  desplazar e ir al estado 95
+    '*'  desplazar e ir al estado 96
+    '/'  desplazar e ir al estado 97
+    '.'  desplazar e ir al estado 98
+    ')'  desplazar e ir al estado 162
+    '%'  desplazar e ir al estado 99
+    '&'  desplazar e ir al estado 100
+    '|'  desplazar e ir al estado 101
+    '^'  desplazar e ir al estado 102
+
+
+Estado 122
+
+   41 declaration: FINAL tipo ID • '=' expr
+
+    '='  desplazar e ir al estado 163
+
+
+Estado 123
+
+   76 expr: '(' tipo ')' • expr
+
+    FLOAD       desplazar e ir al estado 4
+    STRING      desplazar e ir al estado 5
+    ID          desplazar e ir al estado 61
+    CHAR        desplazar e ir al estado 7
+    DECIMAL     desplazar e ir al estado 8
+    NUMBER      desplazar e ir al estado 9
+    TRUE        desplazar e ir al estado 10
+    FALSE       desplazar e ir al estado 11
+    CONTINUE    desplazar e ir al estado 62
+    ARRAYS      desplazar e ir al estado 27
+    VALUEOF     desplazar e ir al estado 29
+    PARSEINT    desplazar e ir al estado 31
+    PARSEFLOAT  desplazar e ir al estado 32
+    '-'         desplazar e ir al estado 34
+    '('         desplazar e ir al estado 35
+    '!'         desplazar e ir al estado 37
+
+    expr          ir al estado 164
+    callFunction  ir al estado 49
+
+
+Estado 124
+
+   75 expr: '(' expr ')' •
+
+    $default  reduce usando la regla 75 (expr)
+
+
+Estado 125
+
+   27 block: '{' lines '}' •
+
+    $default  reduce usando la regla 27 (block)
+
+
+Estado 126
+
+   39 declaration: tipo ID '=' • expr
+
+    FLOAD       desplazar e ir al estado 4
+    STRING      desplazar e ir al estado 5
+    ID          desplazar e ir al estado 61
+    CHAR        desplazar e ir al estado 7
+    DECIMAL     desplazar e ir al estado 8
+    NUMBER      desplazar e ir al estado 9
+    TRUE        desplazar e ir al estado 10
+    FALSE       desplazar e ir al estado 11
+    CONTINUE    desplazar e ir al estado 62
+    ARRAYS      desplazar e ir al estado 27
+    VALUEOF     desplazar e ir al estado 29
+    PARSEINT    desplazar e ir al estado 31
+    PARSEFLOAT  desplazar e ir al estado 32
+    '-'         desplazar e ir al estado 34
+    '('         desplazar e ir al estado 35
+    '!'         desplazar e ir al estado 37
+
+    expr          ir al estado 165
+    callFunction  ir al estado 49
+
+
+Estado 127
+
+   43 multiDimension: tipo '[' ']' • '[' ']' ID '=' NEW tipo '[' expr ']' '[' expr ']' end
+   44               | tipo '[' ']' • '[' ']' ID '=' '{' elementos '}' end
+  107 larray: tipo '[' ']' • ID '=' NEW tipo '[' expr ']' end
+  108       | tipo '[' ']' • ID '=' '{' elementos '}' end
+  109       | tipo '[' ']' • ID '=' ID '.' ADD '(' expr ')' end
+
+    ID   desplazar e ir al estado 166
+    '['  desplazar e ir al estado 167
+
+
+Estado 128
+
+   55 expr: expr • '+' expr
+   56     | expr • '-' expr
+   57     | expr • '*' expr
+   58     | expr • '/' expr
+   59     | expr • '%' expr
+   61     | expr • AND expr
+   62     | expr • OR expr
+   63     | expr • LE expr
+   64     | expr • GE expr
+   64     | expr GE expr •
+   65     | expr • '<' expr
+   66     | expr • '>' expr
+   67     | expr • EQ expr
+   68     | expr • NEQ expr
+   69     | expr • '&' expr
+   70     | expr • '|' expr
+   71     | expr • '^' expr
+   72     | expr • SHR expr
+   73     | expr • SHL expr
+   93     | expr • '.' EQUALS '(' expr ')'
+   94     | expr • '.' LENGTH
+
+    GE   desplazar e ir al estado 84
+    LE   desplazar e ir al estado 85
+    EQ   desplazar e ir al estado 86
+    NEQ  desplazar e ir al estado 87
+    SHR  desplazar e ir al estado 88
+    SHL  desplazar e ir al estado 89
+    OR   desplazar e ir al estado 90
+    AND  desplazar e ir al estado 91
+    '>'  desplazar e ir al estado 92
+    '<'  desplazar e ir al estado 93
+    '+'  desplazar e ir al estado 94
+    '-'  desplazar e ir al estado 95
+    '*'  desplazar e ir al estado 96
+    '/'  desplazar e ir al estado 97
+    '.'  desplazar e ir al estado 98
+    '%'  desplazar e ir al estado 99
+    '&'  desplazar e ir al estado 100
+    '|'  desplazar e ir al estado 101
+    '^'  desplazar e ir al estado 102
+
+    GE        [reduce usando la regla 64 (expr)]
+    LE        [reduce usando la regla 64 (expr)]
+    EQ        [reduce usando la regla 64 (expr)]
+    NEQ       [reduce usando la regla 64 (expr)]
+    SHR       [reduce usando la regla 64 (expr)]
+    SHL       [reduce usando la regla 64 (expr)]
+    OR        [reduce usando la regla 64 (expr)]
+    AND       [reduce usando la regla 64 (expr)]
+    '>'       [reduce usando la regla 64 (expr)]
+    '<'       [reduce usando la regla 64 (expr)]
+    '+'       [reduce usando la regla 64 (expr)]
+    '-'       [reduce usando la regla 64 (expr)]
+    '*'       [reduce usando la regla 64 (expr)]
+    '/'       [reduce usando la regla 64 (expr)]
+    '.'       [reduce usando la regla 64 (expr)]
+    '%'       [reduce usando la regla 64 (expr)]
+    '&'       [reduce usando la regla 64 (expr)]
+    '|'       [reduce usando la regla 64 (expr)]
+    '^'       [reduce usando la regla 64 (expr)]
+    $default  reduce usando la regla 64 (expr)
+
+
+Estado 129
+
+   55 expr: expr • '+' expr
+   56     | expr • '-' expr
+   57     | expr • '*' expr
+   58     | expr • '/' expr
+   59     | expr • '%' expr
+   61     | expr • AND expr
+   62     | expr • OR expr
+   63     | expr • LE expr
+   63     | expr LE expr •
+   64     | expr • GE expr
+   65     | expr • '<' expr
+   66     | expr • '>' expr
+   67     | expr • EQ expr
+   68     | expr • NEQ expr
+   69     | expr • '&' expr
+   70     | expr • '|' expr
+   71     | expr • '^' expr
+   72     | expr • SHR expr
+   73     | expr • SHL expr
+   93     | expr • '.' EQUALS '(' expr ')'
+   94     | expr • '.' LENGTH
+
+    GE   desplazar e ir al estado 84
+    LE   desplazar e ir al estado 85
+    EQ   desplazar e ir al estado 86
+    NEQ  desplazar e ir al estado 87
+    SHR  desplazar e ir al estado 88
+    SHL  desplazar e ir al estado 89
+    OR   desplazar e ir al estado 90
+    AND  desplazar e ir al estado 91
+    '>'  desplazar e ir al estado 92
+    '<'  desplazar e ir al estado 93
+    '+'  desplazar e ir al estado 94
+    '-'  desplazar e ir al estado 95
+    '*'  desplazar e ir al estado 96
+    '/'  desplazar e ir al estado 97
+    '.'  desplazar e ir al estado 98
+    '%'  desplazar e ir al estado 99
+    '&'  desplazar e ir al estado 100
+    '|'  desplazar e ir al estado 101
+    '^'  desplazar e ir al estado 102
+
+    GE        [reduce usando la regla 63 (expr)]
+    LE        [reduce usando la regla 63 (expr)]
+    EQ        [reduce usando la regla 63 (expr)]
+    NEQ       [reduce usando la regla 63 (expr)]
+    SHR       [reduce usando la regla 63 (expr)]
+    SHL       [reduce usando la regla 63 (expr)]
+    OR        [reduce usando la regla 63 (expr)]
+    AND       [reduce usando la regla 63 (expr)]
+    '>'       [reduce usando la regla 63 (expr)]
+    '<'       [reduce usando la regla 63 (expr)]
+    '+'       [reduce usando la regla 63 (expr)]
+    '-'       [reduce usando la regla 63 (expr)]
+    '*'       [reduce usando la regla 63 (expr)]
+    '/'       [reduce usando la regla 63 (expr)]
+    '.'       [reduce usando la regla 63 (expr)]
+    '%'       [reduce usando la regla 63 (expr)]
+    '&'       [reduce usando la regla 63 (expr)]
+    '|'       [reduce usando la regla 63 (expr)]
+    '^'       [reduce usando la regla 63 (expr)]
+    $default  reduce usando la regla 63 (expr)
+
+
+Estado 130
+
+   55 expr: expr • '+' expr
+   56     | expr • '-' expr
+   57     | expr • '*' expr
+   58     | expr • '/' expr
+   59     | expr • '%' expr
+   61     | expr • AND expr
+   62     | expr • OR expr
+   63     | expr • LE expr
+   64     | expr • GE expr
+   65     | expr • '<' expr
+   66     | expr • '>' expr
+   67     | expr • EQ expr
+   67     | expr EQ expr •
+   68     | expr • NEQ expr
+   69     | expr • '&' expr
+   70     | expr • '|' expr
+   71     | expr • '^' expr
+   72     | expr • SHR expr
+   73     | expr • SHL expr
+   93     | expr • '.' EQUALS '(' expr ')'
+   94     | expr • '.' LENGTH
+
+    GE   desplazar e ir al estado 84
+    LE   desplazar e ir al estado 85
+    EQ   desplazar e ir al estado 86
+    NEQ  desplazar e ir al estado 87
+    SHR  desplazar e ir al estado 88
+    SHL  desplazar e ir al estado 89
+    OR   desplazar e ir al estado 90
+    AND  desplazar e ir al estado 91
+    '>'  desplazar e ir al estado 92
+    '<'  desplazar e ir al estado 93
+    '+'  desplazar e ir al estado 94
+    '-'  desplazar e ir al estado 95
+    '*'  desplazar e ir al estado 96
+    '/'  desplazar e ir al estado 97
+    '.'  desplazar e ir al estado 98
+    '%'  desplazar e ir al estado 99
+    '&'  desplazar e ir al estado 100
+    '|'  desplazar e ir al estado 101
+    '^'  desplazar e ir al estado 102
+
+    GE        [reduce usando la regla 67 (expr)]
+    LE        [reduce usando la regla 67 (expr)]
+    EQ        [reduce usando la regla 67 (expr)]
+    NEQ       [reduce usando la regla 67 (expr)]
+    SHR       [reduce usando la regla 67 (expr)]
+    SHL       [reduce usando la regla 67 (expr)]
+    OR        [reduce usando la regla 67 (expr)]
+    AND       [reduce usando la regla 67 (expr)]
+    '>'       [reduce usando la regla 67 (expr)]
+    '<'       [reduce usando la regla 67 (expr)]
+    '+'       [reduce usando la regla 67 (expr)]
+    '-'       [reduce usando la regla 67 (expr)]
+    '*'       [reduce usando la regla 67 (expr)]
+    '/'       [reduce usando la regla 67 (expr)]
+    '.'       [reduce usando la regla 67 (expr)]
+    '%'       [reduce usando la regla 67 (expr)]
+    '&'       [reduce usando la regla 67 (expr)]
+    '|'       [reduce usando la regla 67 (expr)]
+    '^'       [reduce usando la regla 67 (expr)]
+    $default  reduce usando la regla 67 (expr)
+
+
+Estado 131
+
+   55 expr: expr • '+' expr
+   56     | expr • '-' expr
+   57     | expr • '*' expr
+   58     | expr • '/' expr
+   59     | expr • '%' expr
+   61     | expr • AND expr
+   62     | expr • OR expr
+   63     | expr • LE expr
+   64     | expr • GE expr
+   65     | expr • '<' expr
+   66     | expr • '>' expr
+   67     | expr • EQ expr
+   68     | expr • NEQ expr
+   68     | expr NEQ expr •
+   69     | expr • '&' expr
+   70     | expr • '|' expr
+   71     | expr • '^' expr
+   72     | expr • SHR expr
+   73     | expr • SHL expr
+   93     | expr • '.' EQUALS '(' expr ')'
+   94     | expr • '.' LENGTH
+
+    GE   desplazar e ir al estado 84
+    LE   desplazar e ir al estado 85
+    EQ   desplazar e ir al estado 86
+    NEQ  desplazar e ir al estado 87
+    SHR  desplazar e ir al estado 88
+    SHL  desplazar e ir al estado 89
+    OR   desplazar e ir al estado 90
+    AND  desplazar e ir al estado 91
+    '>'  desplazar e ir al estado 92
+    '<'  desplazar e ir al estado 93
+    '+'  desplazar e ir al estado 94
+    '-'  desplazar e ir al estado 95
+    '*'  desplazar e ir al estado 96
+    '/'  desplazar e ir al estado 97
+    '.'  desplazar e ir al estado 98
+    '%'  desplazar e ir al estado 99
+    '&'  desplazar e ir al estado 100
+    '|'  desplazar e ir al estado 101
+    '^'  desplazar e ir al estado 102
+
+    GE        [reduce usando la regla 68 (expr)]
+    LE        [reduce usando la regla 68 (expr)]
+    EQ        [reduce usando la regla 68 (expr)]
+    NEQ       [reduce usando la regla 68 (expr)]
+    SHR       [reduce usando la regla 68 (expr)]
+    SHL       [reduce usando la regla 68 (expr)]
+    OR        [reduce usando la regla 68 (expr)]
+    AND       [reduce usando la regla 68 (expr)]
+    '>'       [reduce usando la regla 68 (expr)]
+    '<'       [reduce usando la regla 68 (expr)]
+    '+'       [reduce usando la regla 68 (expr)]
+    '-'       [reduce usando la regla 68 (expr)]
+    '*'       [reduce usando la regla 68 (expr)]
+    '/'       [reduce usando la regla 68 (expr)]
+    '.'       [reduce usando la regla 68 (expr)]
+    '%'       [reduce usando la regla 68 (expr)]
+    '&'       [reduce usando la regla 68 (expr)]
+    '|'       [reduce usando la regla 68 (expr)]
+    '^'       [reduce usando la regla 68 (expr)]
+    $default  reduce usando la regla 68 (expr)
+
+
+Estado 132
+
+   55 expr: expr • '+' expr
+   56     | expr • '-' expr
+   57     | expr • '*' expr
+   58     | expr • '/' expr
+   59     | expr • '%' expr
+   61     | expr • AND expr
+   62     | expr • OR expr
+   63     | expr • LE expr
+   64     | expr • GE expr
+   65     | expr • '<' expr
+   66     | expr • '>' expr
+   67     | expr • EQ expr
+   68     | expr • NEQ expr
+   69     | expr • '&' expr
+   70     | expr • '|' expr
+   71     | expr • '^' expr
+   72     | expr • SHR expr
+   72     | expr SHR expr •
+   73     | expr • SHL expr
+   93     | expr • '.' EQUALS '(' expr ')'
+   94     | expr • '.' LENGTH
+
+    GE   desplazar e ir al estado 84
+    LE   desplazar e ir al estado 85
+    EQ   desplazar e ir al estado 86
+    NEQ  desplazar e ir al estado 87
+    SHR  desplazar e ir al estado 88
+    SHL  desplazar e ir al estado 89
+    OR   desplazar e ir al estado 90
+    AND  desplazar e ir al estado 91
+    '>'  desplazar e ir al estado 92
+    '<'  desplazar e ir al estado 93
+    '+'  desplazar e ir al estado 94
+    '-'  desplazar e ir al estado 95
+    '*'  desplazar e ir al estado 96
+    '/'  desplazar e ir al estado 97
+    '.'  desplazar e ir al estado 98
+    '%'  desplazar e ir al estado 99
+    '&'  desplazar e ir al estado 100
+    '|'  desplazar e ir al estado 101
+    '^'  desplazar e ir al estado 102
+
+    GE        [reduce usando la regla 72 (expr)]
+    LE        [reduce usando la regla 72 (expr)]
+    EQ        [reduce usando la regla 72 (expr)]
+    NEQ       [reduce usando la regla 72 (expr)]
+    SHR       [reduce usando la regla 72 (expr)]
+    SHL       [reduce usando la regla 72 (expr)]
+    OR        [reduce usando la regla 72 (expr)]
+    AND       [reduce usando la regla 72 (expr)]
+    '>'       [reduce usando la regla 72 (expr)]
+    '<'       [reduce usando la regla 72 (expr)]
+    '+'       [reduce usando la regla 72 (expr)]
+    '-'       [reduce usando la regla 72 (expr)]
+    '*'       [reduce usando la regla 72 (expr)]
+    '/'       [reduce usando la regla 72 (expr)]
+    '.'       [reduce usando la regla 72 (expr)]
+    '%'       [reduce usando la regla 72 (expr)]
+    '&'       [reduce usando la regla 72 (expr)]
+    '|'       [reduce usando la regla 72 (expr)]
+    '^'       [reduce usando la regla 72 (expr)]
+    $default  reduce usando la regla 72 (expr)
+
+
+Estado 133
+
+   55 expr: expr • '+' expr
+   56     | expr • '-' expr
+   57     | expr • '*' expr
+   58     | expr • '/' expr
+   59     | expr • '%' expr
+   61     | expr • AND expr
+   62     | expr • OR expr
+   63     | expr • LE expr
+   64     | expr • GE expr
+   65     | expr • '<' expr
+   66     | expr • '>' expr
+   67     | expr • EQ expr
+   68     | expr • NEQ expr
+   69     | expr • '&' expr
+   70     | expr • '|' expr
+   71     | expr • '^' expr
+   72     | expr • SHR expr
+   73     | expr • SHL expr
+   73     | expr SHL expr •
+   93     | expr • '.' EQUALS '(' expr ')'
+   94     | expr • '.' LENGTH
+
+    GE   desplazar e ir al estado 84
+    LE   desplazar e ir al estado 85
+    EQ   desplazar e ir al estado 86
+    NEQ  desplazar e ir al estado 87
+    SHR  desplazar e ir al estado 88
+    SHL  desplazar e ir al estado 89
+    OR   desplazar e ir al estado 90
+    AND  desplazar e ir al estado 91
+    '>'  desplazar e ir al estado 92
+    '<'  desplazar e ir al estado 93
+    '+'  desplazar e ir al estado 94
+    '-'  desplazar e ir al estado 95
+    '*'  desplazar e ir al estado 96
+    '/'  desplazar e ir al estado 97
+    '.'  desplazar e ir al estado 98
+    '%'  desplazar e ir al estado 99
+    '&'  desplazar e ir al estado 100
+    '|'  desplazar e ir al estado 101
+    '^'  desplazar e ir al estado 102
+
+    GE        [reduce usando la regla 73 (expr)]
+    LE        [reduce usando la regla 73 (expr)]
+    EQ        [reduce usando la regla 73 (expr)]
+    NEQ       [reduce usando la regla 73 (expr)]
+    SHR       [reduce usando la regla 73 (expr)]
+    SHL       [reduce usando la regla 73 (expr)]
+    OR        [reduce usando la regla 73 (expr)]
+    AND       [reduce usando la regla 73 (expr)]
+    '>'       [reduce usando la regla 73 (expr)]
+    '<'       [reduce usando la regla 73 (expr)]
+    '+'       [reduce usando la regla 73 (expr)]
+    '-'       [reduce usando la regla 73 (expr)]
+    '*'       [reduce usando la regla 73 (expr)]
+    '/'       [reduce usando la regla 73 (expr)]
+    '.'       [reduce usando la regla 73 (expr)]
+    '%'       [reduce usando la regla 73 (expr)]
+    '&'       [reduce usando la regla 73 (expr)]
+    '|'       [reduce usando la regla 73 (expr)]
+    '^'       [reduce usando la regla 73 (expr)]
+    $default  reduce usando la regla 73 (expr)
+
+
+Estado 134
+
+   55 expr: expr • '+' expr
+   56     | expr • '-' expr
+   57     | expr • '*' expr
+   58     | expr • '/' expr
+   59     | expr • '%' expr
+   61     | expr • AND expr
+   62     | expr • OR expr
+   62     | expr OR expr •
+   63     | expr • LE expr
+   64     | expr • GE expr
+   65     | expr • '<' expr
+   66     | expr • '>' expr
+   67     | expr • EQ expr
+   68     | expr • NEQ expr
+   69     | expr • '&' expr
+   70     | expr • '|' expr
+   71     | expr • '^' expr
+   72     | expr • SHR expr
+   73     | expr • SHL expr
+   93     | expr • '.' EQUALS '(' expr ')'
+   94     | expr • '.' LENGTH
+
+    GE   desplazar e ir al estado 84
+    LE   desplazar e ir al estado 85
+    EQ   desplazar e ir al estado 86
+    NEQ  desplazar e ir al estado 87
+    SHR  desplazar e ir al estado 88
+    SHL  desplazar e ir al estado 89
+    OR   desplazar e ir al estado 90
+    AND  desplazar e ir al estado 91
+    '>'  desplazar e ir al estado 92
+    '<'  desplazar e ir al estado 93
+    '+'  desplazar e ir al estado 94
+    '-'  desplazar e ir al estado 95
+    '*'  desplazar e ir al estado 96
+    '/'  desplazar e ir al estado 97
+    '.'  desplazar e ir al estado 98
+    '%'  desplazar e ir al estado 99
+    '&'  desplazar e ir al estado 100
+    '|'  desplazar e ir al estado 101
+    '^'  desplazar e ir al estado 102
+
+    GE        [reduce usando la regla 62 (expr)]
+    LE        [reduce usando la regla 62 (expr)]
+    EQ        [reduce usando la regla 62 (expr)]
+    NEQ       [reduce usando la regla 62 (expr)]
+    SHR       [reduce usando la regla 62 (expr)]
+    SHL       [reduce usando la regla 62 (expr)]
+    OR        [reduce usando la regla 62 (expr)]
+    AND       [reduce usando la regla 62 (expr)]
+    '>'       [reduce usando la regla 62 (expr)]
+    '<'       [reduce usando la regla 62 (expr)]
+    '+'       [reduce usando la regla 62 (expr)]
+    '-'       [reduce usando la regla 62 (expr)]
+    '*'       [reduce usando la regla 62 (expr)]
+    '/'       [reduce usando la regla 62 (expr)]
+    '.'       [reduce usando la regla 62 (expr)]
+    '%'       [reduce usando la regla 62 (expr)]
+    '&'       [reduce usando la regla 62 (expr)]
+    '|'       [reduce usando la regla 62 (expr)]
+    '^'       [reduce usando la regla 62 (expr)]
+    $default  reduce usando la regla 62 (expr)
+
+
+Estado 135
+
+   55 expr: expr • '+' expr
+   56     | expr • '-' expr
+   57     | expr • '*' expr
+   58     | expr • '/' expr
+   59     | expr • '%' expr
+   61     | expr • AND expr
+   61     | expr AND expr •
+   62     | expr • OR expr
+   63     | expr • LE expr
+   64     | expr • GE expr
+   65     | expr • '<' expr
+   66     | expr • '>' expr
+   67     | expr • EQ expr
+   68     | expr • NEQ expr
+   69     | expr • '&' expr
+   70     | expr • '|' expr
+   71     | expr • '^' expr
+   72     | expr • SHR expr
+   73     | expr • SHL expr
+   93     | expr • '.' EQUALS '(' expr ')'
+   94     | expr • '.' LENGTH
+
+    GE   desplazar e ir al estado 84
+    LE   desplazar e ir al estado 85
+    EQ   desplazar e ir al estado 86
+    NEQ  desplazar e ir al estado 87
+    SHR  desplazar e ir al estado 88
+    SHL  desplazar e ir al estado 89
+    OR   desplazar e ir al estado 90
+    AND  desplazar e ir al estado 91
+    '>'  desplazar e ir al estado 92
+    '<'  desplazar e ir al estado 93
+    '+'  desplazar e ir al estado 94
+    '-'  desplazar e ir al estado 95
+    '*'  desplazar e ir al estado 96
+    '/'  desplazar e ir al estado 97
+    '.'  desplazar e ir al estado 98
+    '%'  desplazar e ir al estado 99
+    '&'  desplazar e ir al estado 100
+    '|'  desplazar e ir al estado 101
+    '^'  desplazar e ir al estado 102
+
+    GE        [reduce usando la regla 61 (expr)]
+    LE        [reduce usando la regla 61 (expr)]
+    EQ        [reduce usando la regla 61 (expr)]
+    NEQ       [reduce usando la regla 61 (expr)]
+    SHR       [reduce usando la regla 61 (expr)]
+    SHL       [reduce usando la regla 61 (expr)]
+    OR        [reduce usando la regla 61 (expr)]
+    AND       [reduce usando la regla 61 (expr)]
+    '>'       [reduce usando la regla 61 (expr)]
+    '<'       [reduce usando la regla 61 (expr)]
+    '+'       [reduce usando la regla 61 (expr)]
+    '-'       [reduce usando la regla 61 (expr)]
+    '*'       [reduce usando la regla 61 (expr)]
+    '/'       [reduce usando la regla 61 (expr)]
+    '.'       [reduce usando la regla 61 (expr)]
+    '%'       [reduce usando la regla 61 (expr)]
+    '&'       [reduce usando la regla 61 (expr)]
+    '|'       [reduce usando la regla 61 (expr)]
+    '^'       [reduce usando la regla 61 (expr)]
+    $default  reduce usando la regla 61 (expr)
+
+
+Estado 136
+
+   55 expr: expr • '+' expr
+   56     | expr • '-' expr
+   57     | expr • '*' expr
+   58     | expr • '/' expr
+   59     | expr • '%' expr
+   61     | expr • AND expr
+   62     | expr • OR expr
+   63     | expr • LE expr
+   64     | expr • GE expr
+   65     | expr • '<' expr
+   66     | expr • '>' expr
+   66     | expr '>' expr •
+   67     | expr • EQ expr
+   68     | expr • NEQ expr
+   69     | expr • '&' expr
+   70     | expr • '|' expr
+   71     | expr • '^' expr
+   72     | expr • SHR expr
+   73     | expr • SHL expr
+   93     | expr • '.' EQUALS '(' expr ')'
+   94     | expr • '.' LENGTH
+
+    GE   desplazar e ir al estado 84
+    LE   desplazar e ir al estado 85
+    EQ   desplazar e ir al estado 86
+    NEQ  desplazar e ir al estado 87
+    SHR  desplazar e ir al estado 88
+    SHL  desplazar e ir al estado 89
+    OR   desplazar e ir al estado 90
+    AND  desplazar e ir al estado 91
+    '+'  desplazar e ir al estado 94
+    '-'  desplazar e ir al estado 95
+    '*'  desplazar e ir al estado 96
+    '/'  desplazar e ir al estado 97
+    '.'  desplazar e ir al estado 98
+    '%'  desplazar e ir al estado 99
+    '&'  desplazar e ir al estado 100
+    '|'  desplazar e ir al estado 101
+    '^'  desplazar e ir al estado 102
+
+    GE        [reduce usando la regla 66 (expr)]
+    LE        [reduce usando la regla 66 (expr)]
+    EQ        [reduce usando la regla 66 (expr)]
+    NEQ       [reduce usando la regla 66 (expr)]
+    SHR       [reduce usando la regla 66 (expr)]
+    SHL       [reduce usando la regla 66 (expr)]
+    OR        [reduce usando la regla 66 (expr)]
+    AND       [reduce usando la regla 66 (expr)]
+    '.'       [reduce usando la regla 66 (expr)]
+    '%'       [reduce usando la regla 66 (expr)]
+    '&'       [reduce usando la regla 66 (expr)]
+    '|'       [reduce usando la regla 66 (expr)]
+    '^'       [reduce usando la regla 66 (expr)]
+    $default  reduce usando la regla 66 (expr)
+
+
+Estado 137
+
+   55 expr: expr • '+' expr
+   56     | expr • '-' expr
+   57     | expr • '*' expr
+   58     | expr • '/' expr
+   59     | expr • '%' expr
+   61     | expr • AND expr
+   62     | expr • OR expr
+   63     | expr • LE expr
+   64     | expr • GE expr
+   65     | expr • '<' expr
+   65     | expr '<' expr •
+   66     | expr • '>' expr
+   67     | expr • EQ expr
+   68     | expr • NEQ expr
+   69     | expr • '&' expr
+   70     | expr • '|' expr
+   71     | expr • '^' expr
+   72     | expr • SHR expr
+   73     | expr • SHL expr
+   93     | expr • '.' EQUALS '(' expr ')'
+   94     | expr • '.' LENGTH
+
+    GE   desplazar e ir al estado 84
+    LE   desplazar e ir al estado 85
+    EQ   desplazar e ir al estado 86
+    NEQ  desplazar e ir al estado 87
+    SHR  desplazar e ir al estado 88
+    SHL  desplazar e ir al estado 89
+    OR   desplazar e ir al estado 90
+    AND  desplazar e ir al estado 91
+    '+'  desplazar e ir al estado 94
+    '-'  desplazar e ir al estado 95
+    '*'  desplazar e ir al estado 96
+    '/'  desplazar e ir al estado 97
+    '.'  desplazar e ir al estado 98
+    '%'  desplazar e ir al estado 99
+    '&'  desplazar e ir al estado 100
+    '|'  desplazar e ir al estado 101
+    '^'  desplazar e ir al estado 102
+
+    GE        [reduce usando la regla 65 (expr)]
+    LE        [reduce usando la regla 65 (expr)]
+    EQ        [reduce usando la regla 65 (expr)]
+    NEQ       [reduce usando la regla 65 (expr)]
+    SHR       [reduce usando la regla 65 (expr)]
+    SHL       [reduce usando la regla 65 (expr)]
+    OR        [reduce usando la regla 65 (expr)]
+    AND       [reduce usando la regla 65 (expr)]
+    '.'       [reduce usando la regla 65 (expr)]
+    '%'       [reduce usando la regla 65 (expr)]
+    '&'       [reduce usando la regla 65 (expr)]
+    '|'       [reduce usando la regla 65 (expr)]
+    '^'       [reduce usando la regla 65 (expr)]
+    $default  reduce usando la regla 65 (expr)
+
+
+Estado 138
+
+   55 expr: expr • '+' expr
+   55     | expr '+' expr •
+   56     | expr • '-' expr
+   57     | expr • '*' expr
+   58     | expr • '/' expr
+   59     | expr • '%' expr
+   61     | expr • AND expr
+   62     | expr • OR expr
+   63     | expr • LE expr
+   64     | expr • GE expr
+   65     | expr • '<' expr
+   66     | expr • '>' expr
+   67     | expr • EQ expr
+   68     | expr • NEQ expr
+   69     | expr • '&' expr
+   70     | expr • '|' expr
+   71     | expr • '^' expr
+   72     | expr • SHR expr
+   73     | expr • SHL expr
+   93     | expr • '.' EQUALS '(' expr ')'
+   94     | expr • '.' LENGTH
+
+    GE   desplazar e ir al estado 84
+    LE   desplazar e ir al estado 85
+    EQ   desplazar e ir al estado 86
+    NEQ  desplazar e ir al estado 87
+    SHR  desplazar e ir al estado 88
+    SHL  desplazar e ir al estado 89
+    OR   desplazar e ir al estado 90
+    AND  desplazar e ir al estado 91
+    '*'  desplazar e ir al estado 96
+    '/'  desplazar e ir al estado 97
+    '.'  desplazar e ir al estado 98
+    '%'  desplazar e ir al estado 99
+    '&'  desplazar e ir al estado 100
+    '|'  desplazar e ir al estado 101
+    '^'  desplazar e ir al estado 102
+
+    GE        [reduce usando la regla 55 (expr)]
+    LE        [reduce usando la regla 55 (expr)]
+    EQ        [reduce usando la regla 55 (expr)]
+    NEQ       [reduce usando la regla 55 (expr)]
+    SHR       [reduce usando la regla 55 (expr)]
+    SHL       [reduce usando la regla 55 (expr)]
+    OR        [reduce usando la regla 55 (expr)]
+    AND       [reduce usando la regla 55 (expr)]
+    '.'       [reduce usando la regla 55 (expr)]
+    '%'       [reduce usando la regla 55 (expr)]
+    '&'       [reduce usando la regla 55 (expr)]
+    '|'       [reduce usando la regla 55 (expr)]
+    '^'       [reduce usando la regla 55 (expr)]
+    $default  reduce usando la regla 55 (expr)
+
+
+Estado 139
+
+   55 expr: expr • '+' expr
+   56     | expr • '-' expr
+   56     | expr '-' expr •
+   57     | expr • '*' expr
+   58     | expr • '/' expr
+   59     | expr • '%' expr
+   61     | expr • AND expr
+   62     | expr • OR expr
+   63     | expr • LE expr
+   64     | expr • GE expr
+   65     | expr • '<' expr
+   66     | expr • '>' expr
+   67     | expr • EQ expr
+   68     | expr • NEQ expr
+   69     | expr • '&' expr
+   70     | expr • '|' expr
+   71     | expr • '^' expr
+   72     | expr • SHR expr
+   73     | expr • SHL expr
+   93     | expr • '.' EQUALS '(' expr ')'
+   94     | expr • '.' LENGTH
+
+    GE   desplazar e ir al estado 84
+    LE   desplazar e ir al estado 85
+    EQ   desplazar e ir al estado 86
+    NEQ  desplazar e ir al estado 87
+    SHR  desplazar e ir al estado 88
+    SHL  desplazar e ir al estado 89
+    OR   desplazar e ir al estado 90
+    AND  desplazar e ir al estado 91
+    '*'  desplazar e ir al estado 96
+    '/'  desplazar e ir al estado 97
+    '.'  desplazar e ir al estado 98
+    '%'  desplazar e ir al estado 99
+    '&'  desplazar e ir al estado 100
+    '|'  desplazar e ir al estado 101
+    '^'  desplazar e ir al estado 102
+
+    GE        [reduce usando la regla 56 (expr)]
+    LE        [reduce usando la regla 56 (expr)]
+    EQ        [reduce usando la regla 56 (expr)]
+    NEQ       [reduce usando la regla 56 (expr)]
+    SHR       [reduce usando la regla 56 (expr)]
+    SHL       [reduce usando la regla 56 (expr)]
+    OR        [reduce usando la regla 56 (expr)]
+    AND       [reduce usando la regla 56 (expr)]
+    '.'       [reduce usando la regla 56 (expr)]
+    '%'       [reduce usando la regla 56 (expr)]
+    '&'       [reduce usando la regla 56 (expr)]
+    '|'       [reduce usando la regla 56 (expr)]
+    '^'       [reduce usando la regla 56 (expr)]
+    $default  reduce usando la regla 56 (expr)
+
+
+Estado 140
+
+   55 expr: expr • '+' expr
+   56     | expr • '-' expr
+   57     | expr • '*' expr
+   57     | expr '*' expr •
+   58     | expr • '/' expr
+   59     | expr • '%' expr
+   61     | expr • AND expr
+   62     | expr • OR expr
+   63     | expr • LE expr
+   64     | expr • GE expr
+   65     | expr • '<' expr
+   66     | expr • '>' expr
+   67     | expr • EQ expr
+   68     | expr • NEQ expr
+   69     | expr • '&' expr
+   70     | expr • '|' expr
+   71     | expr • '^' expr
+   72     | expr • SHR expr
+   73     | expr • SHL expr
+   93     | expr • '.' EQUALS '(' expr ')'
+   94     | expr • '.' LENGTH
+
+    GE   desplazar e ir al estado 84
+    LE   desplazar e ir al estado 85
+    EQ   desplazar e ir al estado 86
+    NEQ  desplazar e ir al estado 87
+    SHR  desplazar e ir al estado 88
+    SHL  desplazar e ir al estado 89
+    OR   desplazar e ir al estado 90
+    AND  desplazar e ir al estado 91
+    '.'  desplazar e ir al estado 98
+    '%'  desplazar e ir al estado 99
+    '&'  desplazar e ir al estado 100
+    '|'  desplazar e ir al estado 101
+    '^'  desplazar e ir al estado 102
+
+    GE        [reduce usando la regla 57 (expr)]
+    LE        [reduce usando la regla 57 (expr)]
+    EQ        [reduce usando la regla 57 (expr)]
+    NEQ       [reduce usando la regla 57 (expr)]
+    SHR       [reduce usando la regla 57 (expr)]
+    SHL       [reduce usando la regla 57 (expr)]
+    OR        [reduce usando la regla 57 (expr)]
+    AND       [reduce usando la regla 57 (expr)]
+    '.'       [reduce usando la regla 57 (expr)]
+    '%'       [reduce usando la regla 57 (expr)]
+    '&'       [reduce usando la regla 57 (expr)]
+    '|'       [reduce usando la regla 57 (expr)]
+    '^'       [reduce usando la regla 57 (expr)]
+    $default  reduce usando la regla 57 (expr)
+
+
+Estado 141
+
+   55 expr: expr • '+' expr
+   56     | expr • '-' expr
+   57     | expr • '*' expr
+   58     | expr • '/' expr
+   58     | expr '/' expr •
+   59     | expr • '%' expr
+   61     | expr • AND expr
+   62     | expr • OR expr
+   63     | expr • LE expr
+   64     | expr • GE expr
+   65     | expr • '<' expr
+   66     | expr • '>' expr
+   67     | expr • EQ expr
+   68     | expr • NEQ expr
+   69     | expr • '&' expr
+   70     | expr • '|' expr
+   71     | expr • '^' expr
+   72     | expr • SHR expr
+   73     | expr • SHL expr
+   93     | expr • '.' EQUALS '(' expr ')'
+   94     | expr • '.' LENGTH
+
+    GE   desplazar e ir al estado 84
+    LE   desplazar e ir al estado 85
+    EQ   desplazar e ir al estado 86
+    NEQ  desplazar e ir al estado 87
+    SHR  desplazar e ir al estado 88
+    SHL  desplazar e ir al estado 89
+    OR   desplazar e ir al estado 90
+    AND  desplazar e ir al estado 91
+    '.'  desplazar e ir al estado 98
+    '%'  desplazar e ir al estado 99
+    '&'  desplazar e ir al estado 100
+    '|'  desplazar e ir al estado 101
+    '^'  desplazar e ir al estado 102
+
+    GE        [reduce usando la regla 58 (expr)]
+    LE        [reduce usando la regla 58 (expr)]
+    EQ        [reduce usando la regla 58 (expr)]
+    NEQ       [reduce usando la regla 58 (expr)]
+    SHR       [reduce usando la regla 58 (expr)]
+    SHL       [reduce usando la regla 58 (expr)]
+    OR        [reduce usando la regla 58 (expr)]
+    AND       [reduce usando la regla 58 (expr)]
+    '.'       [reduce usando la regla 58 (expr)]
+    '%'       [reduce usando la regla 58 (expr)]
+    '&'       [reduce usando la regla 58 (expr)]
+    '|'       [reduce usando la regla 58 (expr)]
+    '^'       [reduce usando la regla 58 (expr)]
+    $default  reduce usando la regla 58 (expr)
+
+
+Estado 142
+
+   93 expr: expr '.' EQUALS • '(' expr ')'
+
+    '('  desplazar e ir al estado 168
+
+
+Estado 143
+
+   94 expr: expr '.' LENGTH •
+
+    $default  reduce usando la regla 94 (expr)
+
+
+Estado 144
+
+   55 expr: expr • '+' expr
+   56     | expr • '-' expr
+   57     | expr • '*' expr
+   58     | expr • '/' expr
+   59     | expr • '%' expr
+   59     | expr '%' expr •
+   61     | expr • AND expr
+   62     | expr • OR expr
+   63     | expr • LE expr
+   64     | expr • GE expr
+   65     | expr • '<' expr
+   66     | expr • '>' expr
+   67     | expr • EQ expr
+   68     | expr • NEQ expr
+   69     | expr • '&' expr
+   70     | expr • '|' expr
+   71     | expr • '^' expr
+   72     | expr • SHR expr
+   73     | expr • SHL expr
+   93     | expr • '.' EQUALS '(' expr ')'
+   94     | expr • '.' LENGTH
+
+    GE   desplazar e ir al estado 84
+    LE   desplazar e ir al estado 85
+    EQ   desplazar e ir al estado 86
+    NEQ  desplazar e ir al estado 87
+    SHR  desplazar e ir al estado 88
+    SHL  desplazar e ir al estado 89
+    OR   desplazar e ir al estado 90
+    AND  desplazar e ir al estado 91
+    '>'  desplazar e ir al estado 92
+    '<'  desplazar e ir al estado 93
+    '+'  desplazar e ir al estado 94
+    '-'  desplazar e ir al estado 95
+    '*'  desplazar e ir al estado 96
+    '/'  desplazar e ir al estado 97
+    '.'  desplazar e ir al estado 98
+    '%'  desplazar e ir al estado 99
+    '&'  desplazar e ir al estado 100
+    '|'  desplazar e ir al estado 101
+    '^'  desplazar e ir al estado 102
+
+    GE        [reduce usando la regla 59 (expr)]
+    LE        [reduce usando la regla 59 (expr)]
+    EQ        [reduce usando la regla 59 (expr)]
+    NEQ       [reduce usando la regla 59 (expr)]
+    SHR       [reduce usando la regla 59 (expr)]
+    SHL       [reduce usando la regla 59 (expr)]
+    OR        [reduce usando la regla 59 (expr)]
+    AND       [reduce usando la regla 59 (expr)]
+    '>'       [reduce usando la regla 59 (expr)]
+    '<'       [reduce usando la regla 59 (expr)]
+    '+'       [reduce usando la regla 59 (expr)]
+    '-'       [reduce usando la regla 59 (expr)]
+    '*'       [reduce usando la regla 59 (expr)]
+    '/'       [reduce usando la regla 59 (expr)]
+    '.'       [reduce usando la regla 59 (expr)]
+    '%'       [reduce usando la regla 59 (expr)]
+    '&'       [reduce usando la regla 59 (expr)]
+    '|'       [reduce usando la regla 59 (expr)]
+    '^'       [reduce usando la regla 59 (expr)]
+    $default  reduce usando la regla 59 (expr)
+
+
+Estado 145
+
+   55 expr: expr • '+' expr
+   56     | expr • '-' expr
+   57     | expr • '*' expr
+   58     | expr • '/' expr
+   59     | expr • '%' expr
+   61     | expr • AND expr
+   62     | expr • OR expr
+   63     | expr • LE expr
+   64     | expr • GE expr
+   65     | expr • '<' expr
+   66     | expr • '>' expr
+   67     | expr • EQ expr
+   68     | expr • NEQ expr
+   69     | expr • '&' expr
+   69     | expr '&' expr •
+   70     | expr • '|' expr
+   71     | expr • '^' expr
+   72     | expr • SHR expr
+   73     | expr • SHL expr
+   93     | expr • '.' EQUALS '(' expr ')'
+   94     | expr • '.' LENGTH
+
+    GE   desplazar e ir al estado 84
+    LE   desplazar e ir al estado 85
+    EQ   desplazar e ir al estado 86
+    NEQ  desplazar e ir al estado 87
+    SHR  desplazar e ir al estado 88
+    SHL  desplazar e ir al estado 89
+    OR   desplazar e ir al estado 90
+    AND  desplazar e ir al estado 91
+    '>'  desplazar e ir al estado 92
+    '<'  desplazar e ir al estado 93
+    '+'  desplazar e ir al estado 94
+    '-'  desplazar e ir al estado 95
+    '*'  desplazar e ir al estado 96
+    '/'  desplazar e ir al estado 97
+    '.'  desplazar e ir al estado 98
+    '%'  desplazar e ir al estado 99
+    '&'  desplazar e ir al estado 100
+    '|'  desplazar e ir al estado 101
+    '^'  desplazar e ir al estado 102
+
+    GE        [reduce usando la regla 69 (expr)]
+    LE        [reduce usando la regla 69 (expr)]
+    EQ        [reduce usando la regla 69 (expr)]
+    NEQ       [reduce usando la regla 69 (expr)]
+    SHR       [reduce usando la regla 69 (expr)]
+    SHL       [reduce usando la regla 69 (expr)]
+    OR        [reduce usando la regla 69 (expr)]
+    AND       [reduce usando la regla 69 (expr)]
+    '>'       [reduce usando la regla 69 (expr)]
+    '<'       [reduce usando la regla 69 (expr)]
+    '+'       [reduce usando la regla 69 (expr)]
+    '-'       [reduce usando la regla 69 (expr)]
+    '*'       [reduce usando la regla 69 (expr)]
+    '/'       [reduce usando la regla 69 (expr)]
+    '.'       [reduce usando la regla 69 (expr)]
+    '%'       [reduce usando la regla 69 (expr)]
+    '&'       [reduce usando la regla 69 (expr)]
+    '|'       [reduce usando la regla 69 (expr)]
+    '^'       [reduce usando la regla 69 (expr)]
+    $default  reduce usando la regla 69 (expr)
+
+
+Estado 146
+
+   55 expr: expr • '+' expr
+   56     | expr • '-' expr
+   57     | expr • '*' expr
+   58     | expr • '/' expr
+   59     | expr • '%' expr
+   61     | expr • AND expr
+   62     | expr • OR expr
+   63     | expr • LE expr
+   64     | expr • GE expr
+   65     | expr • '<' expr
+   66     | expr • '>' expr
+   67     | expr • EQ expr
+   68     | expr • NEQ expr
+   69     | expr • '&' expr
+   70     | expr • '|' expr
+   70     | expr '|' expr •
+   71     | expr • '^' expr
+   72     | expr • SHR expr
+   73     | expr • SHL expr
+   93     | expr • '.' EQUALS '(' expr ')'
+   94     | expr • '.' LENGTH
+
+    GE   desplazar e ir al estado 84
+    LE   desplazar e ir al estado 85
+    EQ   desplazar e ir al estado 86
+    NEQ  desplazar e ir al estado 87
+    SHR  desplazar e ir al estado 88
+    SHL  desplazar e ir al estado 89
+    OR   desplazar e ir al estado 90
+    AND  desplazar e ir al estado 91
+    '>'  desplazar e ir al estado 92
+    '<'  desplazar e ir al estado 93
+    '+'  desplazar e ir al estado 94
+    '-'  desplazar e ir al estado 95
+    '*'  desplazar e ir al estado 96
+    '/'  desplazar e ir al estado 97
+    '.'  desplazar e ir al estado 98
+    '%'  desplazar e ir al estado 99
+    '&'  desplazar e ir al estado 100
+    '|'  desplazar e ir al estado 101
+    '^'  desplazar e ir al estado 102
+
+    GE        [reduce usando la regla 70 (expr)]
+    LE        [reduce usando la regla 70 (expr)]
+    EQ        [reduce usando la regla 70 (expr)]
+    NEQ       [reduce usando la regla 70 (expr)]
+    SHR       [reduce usando la regla 70 (expr)]
+    SHL       [reduce usando la regla 70 (expr)]
+    OR        [reduce usando la regla 70 (expr)]
+    AND       [reduce usando la regla 70 (expr)]
+    '>'       [reduce usando la regla 70 (expr)]
+    '<'       [reduce usando la regla 70 (expr)]
+    '+'       [reduce usando la regla 70 (expr)]
+    '-'       [reduce usando la regla 70 (expr)]
+    '*'       [reduce usando la regla 70 (expr)]
+    '/'       [reduce usando la regla 70 (expr)]
+    '.'       [reduce usando la regla 70 (expr)]
+    '%'       [reduce usando la regla 70 (expr)]
+    '&'       [reduce usando la regla 70 (expr)]
+    '|'       [reduce usando la regla 70 (expr)]
+    '^'       [reduce usando la regla 70 (expr)]
+    $default  reduce usando la regla 70 (expr)
+
+
+Estado 147
+
+   55 expr: expr • '+' expr
+   56     | expr • '-' expr
+   57     | expr • '*' expr
+   58     | expr • '/' expr
+   59     | expr • '%' expr
+   61     | expr • AND expr
+   62     | expr • OR expr
+   63     | expr • LE expr
+   64     | expr • GE expr
+   65     | expr • '<' expr
+   66     | expr • '>' expr
+   67     | expr • EQ expr
+   68     | expr • NEQ expr
+   69     | expr • '&' expr
+   70     | expr • '|' expr
+   71     | expr • '^' expr
+   71     | expr '^' expr •
+   72     | expr • SHR expr
+   73     | expr • SHL expr
+   93     | expr • '.' EQUALS '(' expr ')'
+   94     | expr • '.' LENGTH
+
+    GE   desplazar e ir al estado 84
+    LE   desplazar e ir al estado 85
+    EQ   desplazar e ir al estado 86
+    NEQ  desplazar e ir al estado 87
+    SHR  desplazar e ir al estado 88
+    SHL  desplazar e ir al estado 89
+    OR   desplazar e ir al estado 90
+    AND  desplazar e ir al estado 91
+    '>'  desplazar e ir al estado 92
+    '<'  desplazar e ir al estado 93
+    '+'  desplazar e ir al estado 94
+    '-'  desplazar e ir al estado 95
+    '*'  desplazar e ir al estado 96
+    '/'  desplazar e ir al estado 97
+    '.'  desplazar e ir al estado 98
+    '%'  desplazar e ir al estado 99
+    '&'  desplazar e ir al estado 100
+    '|'  desplazar e ir al estado 101
+    '^'  desplazar e ir al estado 102
+
+    GE        [reduce usando la regla 71 (expr)]
+    LE        [reduce usando la regla 71 (expr)]
+    EQ        [reduce usando la regla 71 (expr)]
+    NEQ       [reduce usando la regla 71 (expr)]
+    SHR       [reduce usando la regla 71 (expr)]
+    SHL       [reduce usando la regla 71 (expr)]
+    OR        [reduce usando la regla 71 (expr)]
+    AND       [reduce usando la regla 71 (expr)]
+    '>'       [reduce usando la regla 71 (expr)]
+    '<'       [reduce usando la regla 71 (expr)]
+    '+'       [reduce usando la regla 71 (expr)]
+    '-'       [reduce usando la regla 71 (expr)]
+    '*'       [reduce usando la regla 71 (expr)]
+    '/'       [reduce usando la regla 71 (expr)]
+    '.'       [reduce usando la regla 71 (expr)]
+    '%'       [reduce usando la regla 71 (expr)]
+    '&'       [reduce usando la regla 71 (expr)]
+    '|'       [reduce usando la regla 71 (expr)]
+    '^'       [reduce usando la regla 71 (expr)]
+    $default  reduce usando la regla 71 (expr)
+
+
+Estado 148
+
+  101 arglist: expr ',' • arglist
+
+    FLOAD       desplazar e ir al estado 4
+    STRING      desplazar e ir al estado 5
+    ID          desplazar e ir al estado 61
+    CHAR        desplazar e ir al estado 7
+    DECIMAL     desplazar e ir al estado 8
+    NUMBER      desplazar e ir al estado 9
+    TRUE        desplazar e ir al estado 10
+    FALSE       desplazar e ir al estado 11
+    CONTINUE    desplazar e ir al estado 62
+    ARRAYS      desplazar e ir al estado 27
+    VALUEOF     desplazar e ir al estado 29
+    PARSEINT    desplazar e ir al estado 31
+    PARSEFLOAT  desplazar e ir al estado 32
+    '-'         desplazar e ir al estado 34
+    '('         desplazar e ir al estado 35
+    '!'         desplazar e ir al estado 37
+
+    expr          ir al estado 104
+    callFunction  ir al estado 49
+    arglist       ir al estado 169
+
+
+Estado 149
+
+   97 callFunction: ID '(' args ')' •
+
+    $default  reduce usando la regla 97 (callFunction)
+
+
+Estado 150
+
+   79 expr: ID '[' expr ']' •
+   80     | ID '[' expr ']' • '=' expr
+   90     | ID '[' expr ']' • '[' expr ']'
+   91     | ID '[' expr ']' • '[' expr ']' '=' expr
+
+    '='  desplazar e ir al estado 170
+    '['  desplazar e ir al estado 171
+
+    $default  reduce usando la regla 79 (expr)
+
+
+Estado 151
+
+   22 sentenciasIf: IF '(' expr ')' • block
+   23             | IF '(' expr ')' • block ELSE block
+
+    '{'  desplazar e ir al estado 36
+
+    block  ir al estado 172
+
+
+Estado 152
+
+   24 loopWhile: WHILE '(' expr ')' • block
+
+    '{'  desplazar e ir al estado 36
+
+    block  ir al estado 173
+
+
+Estado 153
+
+   25 loopFor: FOR '(' declaration end • expr end assigment ')' block
+
+    FLOAD       desplazar e ir al estado 4
+    STRING      desplazar e ir al estado 5
+    ID          desplazar e ir al estado 61
+    CHAR        desplazar e ir al estado 7
+    DECIMAL     desplazar e ir al estado 8
+    NUMBER      desplazar e ir al estado 9
+    TRUE        desplazar e ir al estado 10
+    FALSE       desplazar e ir al estado 11
+    CONTINUE    desplazar e ir al estado 62
+    ARRAYS      desplazar e ir al estado 27
+    VALUEOF     desplazar e ir al estado 29
+    PARSEINT    desplazar e ir al estado 31
+    PARSEFLOAT  desplazar e ir al estado 32
+    '-'         desplazar e ir al estado 34
+    '('         desplazar e ir al estado 35
+    '!'         desplazar e ir al estado 37
+
+    expr          ir al estado 174
+    callFunction  ir al estado 49
+
+
+Estado 154
+
+   26 loopFor: FOR '(' tipo ID • DOSPUNTOS ID ')' block
+   39 declaration: tipo ID • '=' expr
+   40            | tipo ID •
+
+    DOSPUNTOS  desplazar e ir al estado 175
+    '='        desplazar e ir al estado 126
+
+    $default  reduce usando la regla 40 (declaration)
+
+
+Estado 155
+
+  102 sentenciasSwitch: SWITCH '(' expr ')' • '{' case_list '}'
+
+    '{'  desplazar e ir al estado 176
+
+
+Estado 156
+
+   34 function: PUBLIC STATIC tipo ID • '(' params ')' block
+
+    '('  desplazar e ir al estado 177
+
+
+Estado 157
+
+   33 function: PUBLIC tipo ID '(' • params ')' block
+
+    BOOLEAN    desplazar e ir al estado 12
+    TP_DOUBLE  desplazar e ir al estado 13
+    TP_FLOAT   desplazar e ir al estado 14
+    TP_STRING  desplazar e ir al estado 15
+    TP_CHAR    desplazar e ir al estado 16
+    INTEGER    desplazar e ir al estado 17
+    BREAK      desplazar e ir al estado 65
+    CONTINUE   desplazar e ir al estado 66
+    VOID       desplazar e ir al estado 26
+    ARRAY      desplazar e ir al estado 30
+
+    $default  reduce usando la regla 35 (params)
+
+    params     ir al estado 178
+    paramlist  ir al estado 179
+    tipo       ir al estado 180
+
+
+Estado 158
+
+   92 expr: ARRAYS '.' INDEXOF '(' • expr ',' expr ')'
+
+    FLOAD       desplazar e ir al estado 4
+    STRING      desplazar e ir al estado 5
+    ID          desplazar e ir al estado 61
+    CHAR        desplazar e ir al estado 7
+    DECIMAL     desplazar e ir al estado 8
+    NUMBER      desplazar e ir al estado 9
+    TRUE        desplazar e ir al estado 10
+    FALSE       desplazar e ir al estado 11
+    CONTINUE    desplazar e ir al estado 62
+    ARRAYS      desplazar e ir al estado 27
+    VALUEOF     desplazar e ir al estado 29
+    PARSEINT    desplazar e ir al estado 31
+    PARSEFLOAT  desplazar e ir al estado 32
+    '-'         desplazar e ir al estado 34
+    '('         desplazar e ir al estado 35
+    '!'         desplazar e ir al estado 37
+
+    expr          ir al estado 181
+    callFunction  ir al estado 49
+
+
+Estado 159
+
+    5 line: SYSTEM '.' OUT '.' • PRINTLN '(' expr ')' end
+    6     | SYSTEM '.' OUT '.' • PRINTLN '(' ')' end
+
+    PRINTLN  desplazar e ir al estado 182
+
+
+Estado 160
+
+   77 expr: VALUEOF '(' expr ')' •
+
+    $default  reduce usando la regla 77 (expr)
+
+
+Estado 161
+
+   95 expr: PARSEINT '(' expr ')' •
+
+    $default  reduce usando la regla 95 (expr)
+
+
+Estado 162
+
+   96 expr: PARSEFLOAT '(' expr ')' •
+
+    $default  reduce usando la regla 96 (expr)
+
+
+Estado 163
+
+   41 declaration: FINAL tipo ID '=' • expr
+
+    FLOAD       desplazar e ir al estado 4
+    STRING      desplazar e ir al estado 5
+    ID          desplazar e ir al estado 61
+    CHAR        desplazar e ir al estado 7
+    DECIMAL     desplazar e ir al estado 8
+    NUMBER      desplazar e ir al estado 9
+    TRUE        desplazar e ir al estado 10
+    FALSE       desplazar e ir al estado 11
+    CONTINUE    desplazar e ir al estado 62
+    ARRAYS      desplazar e ir al estado 27
+    VALUEOF     desplazar e ir al estado 29
+    PARSEINT    desplazar e ir al estado 31
+    PARSEFLOAT  desplazar e ir al estado 32
+    '-'         desplazar e ir al estado 34
+    '('         desplazar e ir al estado 35
+    '!'         desplazar e ir al estado 37
+
+    expr          ir al estado 183
+    callFunction  ir al estado 49
+
+
+Estado 164
+
+   55 expr: expr • '+' expr
+   56     | expr • '-' expr
+   57     | expr • '*' expr
+   58     | expr • '/' expr
+   59     | expr • '%' expr
+   61     | expr • AND expr
+   62     | expr • OR expr
+   63     | expr • LE expr
+   64     | expr • GE expr
+   65     | expr • '<' expr
+   66     | expr • '>' expr
+   67     | expr • EQ expr
+   68     | expr • NEQ expr
+   69     | expr • '&' expr
+   70     | expr • '|' expr
+   71     | expr • '^' expr
+   72     | expr • SHR expr
+   73     | expr • SHL expr
+   76     | '(' tipo ')' expr •
+   93     | expr • '.' EQUALS '(' expr ')'
+   94     | expr • '.' LENGTH
+
+    GE   desplazar e ir al estado 84
+    LE   desplazar e ir al estado 85
+    EQ   desplazar e ir al estado 86
+    NEQ  desplazar e ir al estado 87
+    SHR  desplazar e ir al estado 88
+    SHL  desplazar e ir al estado 89
+    OR   desplazar e ir al estado 90
+    AND  desplazar e ir al estado 91
+    '>'  desplazar e ir al estado 92
+    '<'  desplazar e ir al estado 93
+    '+'  desplazar e ir al estado 94
+    '-'  desplazar e ir al estado 95
+    '*'  desplazar e ir al estado 96
+    '/'  desplazar e ir al estado 97
+    '.'  desplazar e ir al estado 98
+    '%'  desplazar e ir al estado 99
+    '&'  desplazar e ir al estado 100
+    '|'  desplazar e ir al estado 101
+    '^'  desplazar e ir al estado 102
+
+    GE        [reduce usando la regla 76 (expr)]
+    LE        [reduce usando la regla 76 (expr)]
+    EQ        [reduce usando la regla 76 (expr)]
+    NEQ       [reduce usando la regla 76 (expr)]
+    SHR       [reduce usando la regla 76 (expr)]
+    SHL       [reduce usando la regla 76 (expr)]
+    OR        [reduce usando la regla 76 (expr)]
+    AND       [reduce usando la regla 76 (expr)]
+    '>'       [reduce usando la regla 76 (expr)]
+    '<'       [reduce usando la regla 76 (expr)]
+    '+'       [reduce usando la regla 76 (expr)]
+    '-'       [reduce usando la regla 76 (expr)]
+    '*'       [reduce usando la regla 76 (expr)]
+    '/'       [reduce usando la regla 76 (expr)]
+    '.'       [reduce usando la regla 76 (expr)]
+    '%'       [reduce usando la regla 76 (expr)]
+    '&'       [reduce usando la regla 76 (expr)]
+    '|'       [reduce usando la regla 76 (expr)]
+    '^'       [reduce usando la regla 76 (expr)]
+    $default  reduce usando la regla 76 (expr)
+
+
+Estado 165
+
+   39 declaration: tipo ID '=' expr •
+   55 expr: expr • '+' expr
+   56     | expr • '-' expr
+   57     | expr • '*' expr
+   58     | expr • '/' expr
+   59     | expr • '%' expr
+   61     | expr • AND expr
+   62     | expr • OR expr
+   63     | expr • LE expr
+   64     | expr • GE expr
+   65     | expr • '<' expr
+   66     | expr • '>' expr
+   67     | expr • EQ expr
+   68     | expr • NEQ expr
+   69     | expr • '&' expr
+   70     | expr • '|' expr
+   71     | expr • '^' expr
+   72     | expr • SHR expr
+   73     | expr • SHL expr
+   93     | expr • '.' EQUALS '(' expr ')'
+   94     | expr • '.' LENGTH
+
+    GE   desplazar e ir al estado 84
+    LE   desplazar e ir al estado 85
+    EQ   desplazar e ir al estado 86
+    NEQ  desplazar e ir al estado 87
+    SHR  desplazar e ir al estado 88
+    SHL  desplazar e ir al estado 89
+    OR   desplazar e ir al estado 90
+    AND  desplazar e ir al estado 91
+    '>'  desplazar e ir al estado 92
+    '<'  desplazar e ir al estado 93
+    '+'  desplazar e ir al estado 94
+    '-'  desplazar e ir al estado 95
+    '*'  desplazar e ir al estado 96
+    '/'  desplazar e ir al estado 97
+    '.'  desplazar e ir al estado 98
+    '%'  desplazar e ir al estado 99
+    '&'  desplazar e ir al estado 100
+    '|'  desplazar e ir al estado 101
+    '^'  desplazar e ir al estado 102
+
+    '-'       [reduce usando la regla 39 (declaration)]
+    $default  reduce usando la regla 39 (declaration)
+
+
+Estado 166
+
+  107 larray: tipo '[' ']' ID • '=' NEW tipo '[' expr ']' end
+  108       | tipo '[' ']' ID • '=' '{' elementos '}' end
+  109       | tipo '[' ']' ID • '=' ID '.' ADD '(' expr ')' end
+
+    '='  desplazar e ir al estado 184
+
+
+Estado 167
+
+   43 multiDimension: tipo '[' ']' '[' • ']' ID '=' NEW tipo '[' expr ']' '[' expr ']' end
+   44               | tipo '[' ']' '[' • ']' ID '=' '{' elementos '}' end
+
+    ']'  desplazar e ir al estado 185
+
+
+Estado 168
+
+   93 expr: expr '.' EQUALS '(' • expr ')'
+
+    FLOAD       desplazar e ir al estado 4
+    STRING      desplazar e ir al estado 5
+    ID          desplazar e ir al estado 61
+    CHAR        desplazar e ir al estado 7
+    DECIMAL     desplazar e ir al estado 8
+    NUMBER      desplazar e ir al estado 9
+    TRUE        desplazar e ir al estado 10
+    FALSE       desplazar e ir al estado 11
+    CONTINUE    desplazar e ir al estado 62
+    ARRAYS      desplazar e ir al estado 27
+    VALUEOF     desplazar e ir al estado 29
+    PARSEINT    desplazar e ir al estado 31
+    PARSEFLOAT  desplazar e ir al estado 32
+    '-'         desplazar e ir al estado 34
+    '('         desplazar e ir al estado 35
+    '!'         desplazar e ir al estado 37
+
+    expr          ir al estado 186
+    callFunction  ir al estado 49
+
+
+Estado 169
+
+  101 arglist: expr ',' arglist •
+
+    $default  reduce usando la regla 101 (arglist)
+
+
+Estado 170
+
+   80 expr: ID '[' expr ']' '=' • expr
+
+    FLOAD       desplazar e ir al estado 4
+    STRING      desplazar e ir al estado 5
+    ID          desplazar e ir al estado 61
+    CHAR        desplazar e ir al estado 7
+    DECIMAL     desplazar e ir al estado 8
+    NUMBER      desplazar e ir al estado 9
+    TRUE        desplazar e ir al estado 10
+    FALSE       desplazar e ir al estado 11
+    CONTINUE    desplazar e ir al estado 62
+    ARRAYS      desplazar e ir al estado 27
+    VALUEOF     desplazar e ir al estado 29
+    PARSEINT    desplazar e ir al estado 31
+    PARSEFLOAT  desplazar e ir al estado 32
+    '-'         desplazar e ir al estado 34
+    '('         desplazar e ir al estado 35
+    '!'         desplazar e ir al estado 37
+
+    expr          ir al estado 187
+    callFunction  ir al estado 49
+
+
+Estado 171
+
+   90 expr: ID '[' expr ']' '[' • expr ']'
+   91     | ID '[' expr ']' '[' • expr ']' '=' expr
+
+    FLOAD       desplazar e ir al estado 4
+    STRING      desplazar e ir al estado 5
+    ID          desplazar e ir al estado 61
+    CHAR        desplazar e ir al estado 7
+    DECIMAL     desplazar e ir al estado 8
+    NUMBER      desplazar e ir al estado 9
+    TRUE        desplazar e ir al estado 10
+    FALSE       desplazar e ir al estado 11
+    CONTINUE    desplazar e ir al estado 62
+    ARRAYS      desplazar e ir al estado 27
+    VALUEOF     desplazar e ir al estado 29
+    PARSEINT    desplazar e ir al estado 31
+    PARSEFLOAT  desplazar e ir al estado 32
+    '-'         desplazar e ir al estado 34
+    '('         desplazar e ir al estado 35
+    '!'         desplazar e ir al estado 37
+
+    expr          ir al estado 188
+    callFunction  ir al estado 49
+
+
+Estado 172
+
+   22 sentenciasIf: IF '(' expr ')' block •
+   23             | IF '(' expr ')' block • ELSE block
+
+    ELSE  desplazar e ir al estado 189
+
+    $default  reduce usando la regla 22 (sentenciasIf)
+
+
+Estado 173
+
+   24 loopWhile: WHILE '(' expr ')' block •
+
+    $default  reduce usando la regla 24 (loopWhile)
+
+
+Estado 174
+
+   25 loopFor: FOR '(' declaration end expr • end assigment ')' block
+   55 expr: expr • '+' expr
+   56     | expr • '-' expr
+   57     | expr • '*' expr
+   58     | expr • '/' expr
+   59     | expr • '%' expr
+   61     | expr • AND expr
+   62     | expr • OR expr
+   63     | expr • LE expr
+   64     | expr • GE expr
+   65     | expr • '<' expr
+   66     | expr • '>' expr
+   67     | expr • EQ expr
+   68     | expr • NEQ expr
+   69     | expr • '&' expr
+   70     | expr • '|' expr
+   71     | expr • '^' expr
+   72     | expr • SHR expr
+   73     | expr • SHL expr
+   93     | expr • '.' EQUALS '(' expr ')'
+   94     | expr • '.' LENGTH
+
+    GE   desplazar e ir al estado 84
+    LE   desplazar e ir al estado 85
+    EQ   desplazar e ir al estado 86
+    NEQ  desplazar e ir al estado 87
+    SHR  desplazar e ir al estado 88
+    SHL  desplazar e ir al estado 89
+    OR   desplazar e ir al estado 90
+    AND  desplazar e ir al estado 91
+    '>'  desplazar e ir al estado 92
+    '<'  desplazar e ir al estado 93
+    '+'  desplazar e ir al estado 94
+    '-'  desplazar e ir al estado 95
+    '*'  desplazar e ir al estado 96
+    '/'  desplazar e ir al estado 97
+    '.'  desplazar e ir al estado 98
+    ';'  desplazar e ir al estado 59
+    '%'  desplazar e ir al estado 99
+    '&'  desplazar e ir al estado 100
+    '|'  desplazar e ir al estado 101
+    '^'  desplazar e ir al estado 102
+
+    end  ir al estado 190
+
+
+Estado 175
+
+   26 loopFor: FOR '(' tipo ID DOSPUNTOS • ID ')' block
+
+    ID  desplazar e ir al estado 191
+
+
+Estado 176
+
+  102 sentenciasSwitch: SWITCH '(' expr ')' '{' • case_list '}'
+
+    $default  reduce usando la regla 29 (case_list)
+
+    case_list  ir al estado 192
+
+
+Estado 177
+
+   34 function: PUBLIC STATIC tipo ID '(' • params ')' block
+
+    BOOLEAN    desplazar e ir al estado 12
+    TP_DOUBLE  desplazar e ir al estado 13
+    TP_FLOAT   desplazar e ir al estado 14
+    TP_STRING  desplazar e ir al estado 15
+    TP_CHAR    desplazar e ir al estado 16
+    INTEGER    desplazar e ir al estado 17
+    BREAK      desplazar e ir al estado 65
+    CONTINUE   desplazar e ir al estado 66
+    VOID       desplazar e ir al estado 26
+    ARRAY      desplazar e ir al estado 30
+
+    $default  reduce usando la regla 35 (params)
+
+    params     ir al estado 193
+    paramlist  ir al estado 179
+    tipo       ir al estado 180
+
+
+Estado 178
+
+   33 function: PUBLIC tipo ID '(' params • ')' block
+
+    ')'  desplazar e ir al estado 194
+
+
+Estado 179
+
+   36 params: paramlist •
+
+    $default  reduce usando la regla 36 (params)
+
+
+Estado 180
+
+   37 paramlist: tipo • ID
+   38          | tipo • ID ',' paramlist
+
+    ID  desplazar e ir al estado 195
+
+
+Estado 181
+
+   55 expr: expr • '+' expr
+   56     | expr • '-' expr
+   57     | expr • '*' expr
+   58     | expr • '/' expr
+   59     | expr • '%' expr
+   61     | expr • AND expr
+   62     | expr • OR expr
+   63     | expr • LE expr
+   64     | expr • GE expr
+   65     | expr • '<' expr
+   66     | expr • '>' expr
+   67     | expr • EQ expr
+   68     | expr • NEQ expr
+   69     | expr • '&' expr
+   70     | expr • '|' expr
+   71     | expr • '^' expr
+   72     | expr • SHR expr
+   73     | expr • SHL expr
+   92     | ARRAYS '.' INDEXOF '(' expr • ',' expr ')'
+   93     | expr • '.' EQUALS '(' expr ')'
+   94     | expr • '.' LENGTH
+
+    GE   desplazar e ir al estado 84
+    LE   desplazar e ir al estado 85
+    EQ   desplazar e ir al estado 86
+    NEQ  desplazar e ir al estado 87
+    SHR  desplazar e ir al estado 88
+    SHL  desplazar e ir al estado 89
+    OR   desplazar e ir al estado 90
+    AND  desplazar e ir al estado 91
+    '>'  desplazar e ir al estado 92
+    '<'  desplazar e ir al estado 93
+    '+'  desplazar e ir al estado 94
+    '-'  desplazar e ir al estado 95
+    '*'  desplazar e ir al estado 96
+    '/'  desplazar e ir al estado 97
+    '.'  desplazar e ir al estado 98
+    ','  desplazar e ir al estado 196
+    '%'  desplazar e ir al estado 99
+    '&'  desplazar e ir al estado 100
+    '|'  desplazar e ir al estado 101
+    '^'  desplazar e ir al estado 102
+
+
+Estado 182
+
+    5 line: SYSTEM '.' OUT '.' PRINTLN • '(' expr ')' end
+    6     | SYSTEM '.' OUT '.' PRINTLN • '(' ')' end
+
+    '('  desplazar e ir al estado 197
+
+
+Estado 183
+
+   41 declaration: FINAL tipo ID '=' expr •
+   55 expr: expr • '+' expr
+   56     | expr • '-' expr
+   57     | expr • '*' expr
+   58     | expr • '/' expr
+   59     | expr • '%' expr
+   61     | expr • AND expr
+   62     | expr • OR expr
+   63     | expr • LE expr
+   64     | expr • GE expr
+   65     | expr • '<' expr
+   66     | expr • '>' expr
+   67     | expr • EQ expr
+   68     | expr • NEQ expr
+   69     | expr • '&' expr
+   70     | expr • '|' expr
+   71     | expr • '^' expr
+   72     | expr • SHR expr
+   73     | expr • SHL expr
+   93     | expr • '.' EQUALS '(' expr ')'
+   94     | expr • '.' LENGTH
+
+    GE   desplazar e ir al estado 84
+    LE   desplazar e ir al estado 85
+    EQ   desplazar e ir al estado 86
+    NEQ  desplazar e ir al estado 87
+    SHR  desplazar e ir al estado 88
+    SHL  desplazar e ir al estado 89
+    OR   desplazar e ir al estado 90
+    AND  desplazar e ir al estado 91
+    '>'  desplazar e ir al estado 92
+    '<'  desplazar e ir al estado 93
+    '+'  desplazar e ir al estado 94
+    '-'  desplazar e ir al estado 95
+    '*'  desplazar e ir al estado 96
+    '/'  desplazar e ir al estado 97
+    '.'  desplazar e ir al estado 98
+    '%'  desplazar e ir al estado 99
+    '&'  desplazar e ir al estado 100
+    '|'  desplazar e ir al estado 101
+    '^'  desplazar e ir al estado 102
+
+    '-'       [reduce usando la regla 41 (declaration)]
+    $default  reduce usando la regla 41 (declaration)
+
+
+Estado 184
+
+  107 larray: tipo '[' ']' ID '=' • NEW tipo '[' expr ']' end
+  108       | tipo '[' ']' ID '=' • '{' elementos '}' end
+  109       | tipo '[' ']' ID '=' • ID '.' ADD '(' expr ')' end
+
+    ID   desplazar e ir al estado 198
+    NEW  desplazar e ir al estado 199
+    '{'  desplazar e ir al estado 200
+
+
+Estado 185
+
+   43 multiDimension: tipo '[' ']' '[' ']' • ID '=' NEW tipo '[' expr ']' '[' expr ']' end
+   44               | tipo '[' ']' '[' ']' • ID '=' '{' elementos '}' end
+
+    ID  desplazar e ir al estado 201
+
+
+Estado 186
+
+   55 expr: expr • '+' expr
+   56     | expr • '-' expr
+   57     | expr • '*' expr
+   58     | expr • '/' expr
+   59     | expr • '%' expr
+   61     | expr • AND expr
+   62     | expr • OR expr
+   63     | expr • LE expr
+   64     | expr • GE expr
+   65     | expr • '<' expr
+   66     | expr • '>' expr
+   67     | expr • EQ expr
+   68     | expr • NEQ expr
+   69     | expr • '&' expr
+   70     | expr • '|' expr
+   71     | expr • '^' expr
+   72     | expr • SHR expr
+   73     | expr • SHL expr
+   93     | expr • '.' EQUALS '(' expr ')'
+   93     | expr '.' EQUALS '(' expr • ')'
+   94     | expr • '.' LENGTH
+
+    GE   desplazar e ir al estado 84
+    LE   desplazar e ir al estado 85
+    EQ   desplazar e ir al estado 86
+    NEQ  desplazar e ir al estado 87
+    SHR  desplazar e ir al estado 88
+    SHL  desplazar e ir al estado 89
+    OR   desplazar e ir al estado 90
+    AND  desplazar e ir al estado 91
+    '>'  desplazar e ir al estado 92
+    '<'  desplazar e ir al estado 93
+    '+'  desplazar e ir al estado 94
+    '-'  desplazar e ir al estado 95
+    '*'  desplazar e ir al estado 96
+    '/'  desplazar e ir al estado 97
+    '.'  desplazar e ir al estado 98
+    ')'  desplazar e ir al estado 202
+    '%'  desplazar e ir al estado 99
+    '&'  desplazar e ir al estado 100
+    '|'  desplazar e ir al estado 101
+    '^'  desplazar e ir al estado 102
+
+
+Estado 187
+
+   55 expr: expr • '+' expr
+   56     | expr • '-' expr
+   57     | expr • '*' expr
+   58     | expr • '/' expr
+   59     | expr • '%' expr
+   61     | expr • AND expr
+   62     | expr • OR expr
+   63     | expr • LE expr
+   64     | expr • GE expr
+   65     | expr • '<' expr
+   66     | expr • '>' expr
+   67     | expr • EQ expr
+   68     | expr • NEQ expr
+   69     | expr • '&' expr
+   70     | expr • '|' expr
+   71     | expr • '^' expr
+   72     | expr • SHR expr
+   73     | expr • SHL expr
+   80     | ID '[' expr ']' '=' expr •
+   93     | expr • '.' EQUALS '(' expr ')'
+   94     | expr • '.' LENGTH
+
+    GE   desplazar e ir al estado 84
+    LE   desplazar e ir al estado 85
+    EQ   desplazar e ir al estado 86
+    NEQ  desplazar e ir al estado 87
+    SHR  desplazar e ir al estado 88
+    SHL  desplazar e ir al estado 89
+    OR   desplazar e ir al estado 90
+    AND  desplazar e ir al estado 91
+    '>'  desplazar e ir al estado 92
+    '<'  desplazar e ir al estado 93
+    '+'  desplazar e ir al estado 94
+    '-'  desplazar e ir al estado 95
+    '*'  desplazar e ir al estado 96
+    '/'  desplazar e ir al estado 97
+    '.'  desplazar e ir al estado 98
+    '%'  desplazar e ir al estado 99
+    '&'  desplazar e ir al estado 100
+    '|'  desplazar e ir al estado 101
+    '^'  desplazar e ir al estado 102
+
+    GE        [reduce usando la regla 80 (expr)]
+    LE        [reduce usando la regla 80 (expr)]
+    EQ        [reduce usando la regla 80 (expr)]
+    NEQ       [reduce usando la regla 80 (expr)]
+    SHR       [reduce usando la regla 80 (expr)]
+    SHL       [reduce usando la regla 80 (expr)]
+    OR        [reduce usando la regla 80 (expr)]
+    AND       [reduce usando la regla 80 (expr)]
+    '>'       [reduce usando la regla 80 (expr)]
+    '<'       [reduce usando la regla 80 (expr)]
+    '+'       [reduce usando la regla 80 (expr)]
+    '-'       [reduce usando la regla 80 (expr)]
+    '*'       [reduce usando la regla 80 (expr)]
+    '/'       [reduce usando la regla 80 (expr)]
+    '.'       [reduce usando la regla 80 (expr)]
+    '%'       [reduce usando la regla 80 (expr)]
+    '&'       [reduce usando la regla 80 (expr)]
+    '|'       [reduce usando la regla 80 (expr)]
+    '^'       [reduce usando la regla 80 (expr)]
+    $default  reduce usando la regla 80 (expr)
+
+
+Estado 188
+
+   55 expr: expr • '+' expr
+   56     | expr • '-' expr
+   57     | expr • '*' expr
+   58     | expr • '/' expr
+   59     | expr • '%' expr
+   61     | expr • AND expr
+   62     | expr • OR expr
+   63     | expr • LE expr
+   64     | expr • GE expr
+   65     | expr • '<' expr
+   66     | expr • '>' expr
+   67     | expr • EQ expr
+   68     | expr • NEQ expr
+   69     | expr • '&' expr
+   70     | expr • '|' expr
+   71     | expr • '^' expr
+   72     | expr • SHR expr
+   73     | expr • SHL expr
+   90     | ID '[' expr ']' '[' expr • ']'
+   91     | ID '[' expr ']' '[' expr • ']' '=' expr
+   93     | expr • '.' EQUALS '(' expr ')'
+   94     | expr • '.' LENGTH
+
+    GE   desplazar e ir al estado 84
+    LE   desplazar e ir al estado 85
+    EQ   desplazar e ir al estado 86
+    NEQ  desplazar e ir al estado 87
+    SHR  desplazar e ir al estado 88
+    SHL  desplazar e ir al estado 89
+    OR   desplazar e ir al estado 90
+    AND  desplazar e ir al estado 91
+    '>'  desplazar e ir al estado 92
+    '<'  desplazar e ir al estado 93
+    '+'  desplazar e ir al estado 94
+    '-'  desplazar e ir al estado 95
+    '*'  desplazar e ir al estado 96
+    '/'  desplazar e ir al estado 97
+    '.'  desplazar e ir al estado 98
+    ']'  desplazar e ir al estado 203
+    '%'  desplazar e ir al estado 99
+    '&'  desplazar e ir al estado 100
+    '|'  desplazar e ir al estado 101
+    '^'  desplazar e ir al estado 102
+
+
+Estado 189
+
+   23 sentenciasIf: IF '(' expr ')' block ELSE • block
+
+    '{'  desplazar e ir al estado 36
+
+    block  ir al estado 204
+
+
+Estado 190
+
+   25 loopFor: FOR '(' declaration end expr end • assigment ')' block
+
+    ID  desplazar e ir al estado 205
+
+    assigment  ir al estado 206
+
+
+Estado 191
+
+   26 loopFor: FOR '(' tipo ID DOSPUNTOS ID • ')' block
+
+    ')'  desplazar e ir al estado 207
+
+
+Estado 192
+
+   30 case_list: case_list • case_stmt
+  102 sentenciasSwitch: SWITCH '(' expr ')' '{' case_list • '}'
+
+    CASE     desplazar e ir al estado 208
+    DEFAULT  desplazar e ir al estado 209
+    '}'      desplazar e ir al estado 210
+
+    case_stmt  ir al estado 211
+
+
+Estado 193
+
+   34 function: PUBLIC STATIC tipo ID '(' params • ')' block
+
+    ')'  desplazar e ir al estado 212
+
+
+Estado 194
+
+   33 function: PUBLIC tipo ID '(' params ')' • block
+
+    '{'  desplazar e ir al estado 36
+
+    block  ir al estado 213
+
+
+Estado 195
+
+   37 paramlist: tipo ID •
+   38          | tipo ID • ',' paramlist
+
+    ','  desplazar e ir al estado 214
+
+    $default  reduce usando la regla 37 (paramlist)
+
+
+Estado 196
+
+   92 expr: ARRAYS '.' INDEXOF '(' expr ',' • expr ')'
+
+    FLOAD       desplazar e ir al estado 4
+    STRING      desplazar e ir al estado 5
+    ID          desplazar e ir al estado 61
+    CHAR        desplazar e ir al estado 7
+    DECIMAL     desplazar e ir al estado 8
+    NUMBER      desplazar e ir al estado 9
+    TRUE        desplazar e ir al estado 10
+    FALSE       desplazar e ir al estado 11
+    CONTINUE    desplazar e ir al estado 62
+    ARRAYS      desplazar e ir al estado 27
+    VALUEOF     desplazar e ir al estado 29
+    PARSEINT    desplazar e ir al estado 31
+    PARSEFLOAT  desplazar e ir al estado 32
+    '-'         desplazar e ir al estado 34
+    '('         desplazar e ir al estado 35
+    '!'         desplazar e ir al estado 37
+
+    expr          ir al estado 215
+    callFunction  ir al estado 49
+
+
+Estado 197
+
+    5 line: SYSTEM '.' OUT '.' PRINTLN '(' • expr ')' end
+    6     | SYSTEM '.' OUT '.' PRINTLN '(' • ')' end
+
+    FLOAD       desplazar e ir al estado 4
+    STRING      desplazar e ir al estado 5
+    ID          desplazar e ir al estado 61
+    CHAR        desplazar e ir al estado 7
+    DECIMAL     desplazar e ir al estado 8
+    NUMBER      desplazar e ir al estado 9
+    TRUE        desplazar e ir al estado 10
+    FALSE       desplazar e ir al estado 11
+    CONTINUE    desplazar e ir al estado 62
+    ARRAYS      desplazar e ir al estado 27
+    VALUEOF     desplazar e ir al estado 29
+    PARSEINT    desplazar e ir al estado 31
+    PARSEFLOAT  desplazar e ir al estado 32
+    '-'         desplazar e ir al estado 34
+    '('         desplazar e ir al estado 35
+    ')'         desplazar e ir al estado 216
+    '!'         desplazar e ir al estado 37
+
+    expr          ir al estado 217
+    callFunction  ir al estado 49
+
+
+Estado 198
+
+  109 larray: tipo '[' ']' ID '=' ID • '.' ADD '(' expr ')' end
+
+    '.'  desplazar e ir al estado 218
+
+
+Estado 199
+
+  107 larray: tipo '[' ']' ID '=' NEW • tipo '[' expr ']' end
+
+    BOOLEAN    desplazar e ir al estado 12
+    TP_DOUBLE  desplazar e ir al estado 13
+    TP_FLOAT   desplazar e ir al estado 14
+    TP_STRING  desplazar e ir al estado 15
+    TP_CHAR    desplazar e ir al estado 16
+    INTEGER    desplazar e ir al estado 17
+    BREAK      desplazar e ir al estado 65
+    CONTINUE   desplazar e ir al estado 66
+    VOID       desplazar e ir al estado 26
+    ARRAY      desplazar e ir al estado 30
+
+    tipo  ir al estado 219
+
+
+Estado 200
+
+  108 larray: tipo '[' ']' ID '=' '{' • elementos '}' end
+
+    FLOAD       desplazar e ir al estado 4
+    STRING      desplazar e ir al estado 5
+    ID          desplazar e ir al estado 61
+    CHAR        desplazar e ir al estado 7
+    DECIMAL     desplazar e ir al estado 8
+    NUMBER      desplazar e ir al estado 9
+    TRUE        desplazar e ir al estado 10
+    FALSE       desplazar e ir al estado 11
+    CONTINUE    desplazar e ir al estado 62
+    ARRAYS      desplazar e ir al estado 27
+    VALUEOF     desplazar e ir al estado 29
+    PARSEINT    desplazar e ir al estado 31
+    PARSEFLOAT  desplazar e ir al estado 32
+    '-'         desplazar e ir al estado 34
+    '('         desplazar e ir al estado 35
+    '{'         desplazar e ir al estado 220
+    '!'         desplazar e ir al estado 37
+
+    expr          ir al estado 221
+    callFunction  ir al estado 49
+    elementos     ir al estado 222
+
+
+Estado 201
+
+   43 multiDimension: tipo '[' ']' '[' ']' ID • '=' NEW tipo '[' expr ']' '[' expr ']' end
+   44               | tipo '[' ']' '[' ']' ID • '=' '{' elementos '}' end
+
+    '='  desplazar e ir al estado 223
+
+
+Estado 202
+
+   93 expr: expr '.' EQUALS '(' expr ')' •
+
+    $default  reduce usando la regla 93 (expr)
+
+
+Estado 203
+
+   90 expr: ID '[' expr ']' '[' expr ']' •
+   91     | ID '[' expr ']' '[' expr ']' • '=' expr
+
+    '='  desplazar e ir al estado 224
+
+    $default  reduce usando la regla 90 (expr)
+
+
+Estado 204
+
+   23 sentenciasIf: IF '(' expr ')' block ELSE block •
+
+    $default  reduce usando la regla 23 (sentenciasIf)
+
+
+Estado 205
+
+   42 assigment: ID • '=' expr
+
+    '='  desplazar e ir al estado 53
+
+
+Estado 206
+
+   25 loopFor: FOR '(' declaration end expr end assigment • ')' block
+
+    ')'  desplazar e ir al estado 225
+
+
+Estado 207
+
+   26 loopFor: FOR '(' tipo ID DOSPUNTOS ID ')' • block
+
+    '{'  desplazar e ir al estado 36
+
+    block  ir al estado 226
+
+
+Estado 208
+
+   31 case_stmt: CASE • expr DOSPUNTOS lines
+
+    FLOAD       desplazar e ir al estado 4
+    STRING      desplazar e ir al estado 5
+    ID          desplazar e ir al estado 61
+    CHAR        desplazar e ir al estado 7
+    DECIMAL     desplazar e ir al estado 8
+    NUMBER      desplazar e ir al estado 9
+    TRUE        desplazar e ir al estado 10
+    FALSE       desplazar e ir al estado 11
+    CONTINUE    desplazar e ir al estado 62
+    ARRAYS      desplazar e ir al estado 27
+    VALUEOF     desplazar e ir al estado 29
+    PARSEINT    desplazar e ir al estado 31
+    PARSEFLOAT  desplazar e ir al estado 32
+    '-'         desplazar e ir al estado 34
+    '('         desplazar e ir al estado 35
+    '!'         desplazar e ir al estado 37
+
+    expr          ir al estado 227
+    callFunction  ir al estado 49
+
+
+Estado 209
+
+   32 case_stmt: DEFAULT • DOSPUNTOS lines
+
+    DOSPUNTOS  desplazar e ir al estado 228
+
+
+Estado 210
+
+  102 sentenciasSwitch: SWITCH '(' expr ')' '{' case_list '}' •
+
+    $default  reduce usando la regla 102 (sentenciasSwitch)
+
+
+Estado 211
+
+   30 case_list: case_list case_stmt •
+
+    $default  reduce usando la regla 30 (case_list)
+
+
+Estado 212
+
+   34 function: PUBLIC STATIC tipo ID '(' params ')' • block
+
+    '{'  desplazar e ir al estado 36
+
+    block  ir al estado 229
+
+
+Estado 213
+
+   33 function: PUBLIC tipo ID '(' params ')' block •
+
+    $default  reduce usando la regla 33 (function)
+
+
+Estado 214
+
+   38 paramlist: tipo ID ',' • paramlist
+
+    BOOLEAN    desplazar e ir al estado 12
+    TP_DOUBLE  desplazar e ir al estado 13
+    TP_FLOAT   desplazar e ir al estado 14
+    TP_STRING  desplazar e ir al estado 15
+    TP_CHAR    desplazar e ir al estado 16
+    INTEGER    desplazar e ir al estado 17
+    BREAK      desplazar e ir al estado 65
+    CONTINUE   desplazar e ir al estado 66
+    VOID       desplazar e ir al estado 26
+    ARRAY      desplazar e ir al estado 30
+
+    paramlist  ir al estado 230
+    tipo       ir al estado 180
+
+
+Estado 215
+
+   55 expr: expr • '+' expr
+   56     | expr • '-' expr
+   57     | expr • '*' expr
+   58     | expr • '/' expr
+   59     | expr • '%' expr
+   61     | expr • AND expr
+   62     | expr • OR expr
+   63     | expr • LE expr
+   64     | expr • GE expr
+   65     | expr • '<' expr
+   66     | expr • '>' expr
+   67     | expr • EQ expr
+   68     | expr • NEQ expr
+   69     | expr • '&' expr
+   70     | expr • '|' expr
+   71     | expr • '^' expr
+   72     | expr • SHR expr
+   73     | expr • SHL expr
+   92     | ARRAYS '.' INDEXOF '(' expr ',' expr • ')'
+   93     | expr • '.' EQUALS '(' expr ')'
+   94     | expr • '.' LENGTH
+
+    GE   desplazar e ir al estado 84
+    LE   desplazar e ir al estado 85
+    EQ   desplazar e ir al estado 86
+    NEQ  desplazar e ir al estado 87
+    SHR  desplazar e ir al estado 88
+    SHL  desplazar e ir al estado 89
+    OR   desplazar e ir al estado 90
+    AND  desplazar e ir al estado 91
+    '>'  desplazar e ir al estado 92
+    '<'  desplazar e ir al estado 93
+    '+'  desplazar e ir al estado 94
+    '-'  desplazar e ir al estado 95
+    '*'  desplazar e ir al estado 96
+    '/'  desplazar e ir al estado 97
+    '.'  desplazar e ir al estado 98
+    ')'  desplazar e ir al estado 231
+    '%'  desplazar e ir al estado 99
+    '&'  desplazar e ir al estado 100
+    '|'  desplazar e ir al estado 101
+    '^'  desplazar e ir al estado 102
+
+
+Estado 216
+
+    6 line: SYSTEM '.' OUT '.' PRINTLN '(' ')' • end
+
+    ';'  desplazar e ir al estado 59
+
+    end  ir al estado 232
+
+
+Estado 217
+
+    5 line: SYSTEM '.' OUT '.' PRINTLN '(' expr • ')' end
+   55 expr: expr • '+' expr
+   56     | expr • '-' expr
+   57     | expr • '*' expr
+   58     | expr • '/' expr
+   59     | expr • '%' expr
+   61     | expr • AND expr
+   62     | expr • OR expr
+   63     | expr • LE expr
+   64     | expr • GE expr
+   65     | expr • '<' expr
+   66     | expr • '>' expr
+   67     | expr • EQ expr
+   68     | expr • NEQ expr
+   69     | expr • '&' expr
+   70     | expr • '|' expr
+   71     | expr • '^' expr
+   72     | expr • SHR expr
+   73     | expr • SHL expr
+   93     | expr • '.' EQUALS '(' expr ')'
+   94     | expr • '.' LENGTH
+
+    GE   desplazar e ir al estado 84
+    LE   desplazar e ir al estado 85
+    EQ   desplazar e ir al estado 86
+    NEQ  desplazar e ir al estado 87
+    SHR  desplazar e ir al estado 88
+    SHL  desplazar e ir al estado 89
+    OR   desplazar e ir al estado 90
+    AND  desplazar e ir al estado 91
+    '>'  desplazar e ir al estado 92
+    '<'  desplazar e ir al estado 93
+    '+'  desplazar e ir al estado 94
+    '-'  desplazar e ir al estado 95
+    '*'  desplazar e ir al estado 96
+    '/'  desplazar e ir al estado 97
+    '.'  desplazar e ir al estado 98
+    ')'  desplazar e ir al estado 233
+    '%'  desplazar e ir al estado 99
+    '&'  desplazar e ir al estado 100
+    '|'  desplazar e ir al estado 101
+    '^'  desplazar e ir al estado 102
+
+
+Estado 218
+
+  109 larray: tipo '[' ']' ID '=' ID '.' • ADD '(' expr ')' end
+
+    ADD  desplazar e ir al estado 234
+
+
+Estado 219
+
+  107 larray: tipo '[' ']' ID '=' NEW tipo • '[' expr ']' end
+
+    '['  desplazar e ir al estado 235
+
+
+Estado 220
+
+  105 elementos: '{' • elementos '}'
+
+    FLOAD       desplazar e ir al estado 4
+    STRING      desplazar e ir al estado 5
+    ID          desplazar e ir al estado 61
+    CHAR        desplazar e ir al estado 7
+    DECIMAL     desplazar e ir al estado 8
+    NUMBER      desplazar e ir al estado 9
+    TRUE        desplazar e ir al estado 10
+    FALSE       desplazar e ir al estado 11
+    CONTINUE    desplazar e ir al estado 62
+    ARRAYS      desplazar e ir al estado 27
+    VALUEOF     desplazar e ir al estado 29
+    PARSEINT    desplazar e ir al estado 31
+    PARSEFLOAT  desplazar e ir al estado 32
+    '-'         desplazar e ir al estado 34
+    '('         desplazar e ir al estado 35
+    '{'         desplazar e ir al estado 220
+    '!'         desplazar e ir al estado 37
+
+    expr          ir al estado 221
+    callFunction  ir al estado 49
+    elementos     ir al estado 236
+
+
+Estado 221
+
+   55 expr: expr • '+' expr
+   56     | expr • '-' expr
+   57     | expr • '*' expr
+   58     | expr • '/' expr
+   59     | expr • '%' expr
+   61     | expr • AND expr
+   62     | expr • OR expr
+   63     | expr • LE expr
+   64     | expr • GE expr
+   65     | expr • '<' expr
+   66     | expr • '>' expr
+   67     | expr • EQ expr
+   68     | expr • NEQ expr
+   69     | expr • '&' expr
+   70     | expr • '|' expr
+   71     | expr • '^' expr
+   72     | expr • SHR expr
+   73     | expr • SHL expr
+   93     | expr • '.' EQUALS '(' expr ')'
+   94     | expr • '.' LENGTH
+  103 elementos: expr • ',' elementos
+  106          | expr •
+
+    GE   desplazar e ir al estado 84
+    LE   desplazar e ir al estado 85
+    EQ   desplazar e ir al estado 86
+    NEQ  desplazar e ir al estado 87
+    SHR  desplazar e ir al estado 88
+    SHL  desplazar e ir al estado 89
+    OR   desplazar e ir al estado 90
+    AND  desplazar e ir al estado 91
+    '>'  desplazar e ir al estado 92
+    '<'  desplazar e ir al estado 93
+    '+'  desplazar e ir al estado 94
+    '-'  desplazar e ir al estado 95
+    '*'  desplazar e ir al estado 96
+    '/'  desplazar e ir al estado 97
+    '.'  desplazar e ir al estado 98
+    ','  desplazar e ir al estado 237
+    '%'  desplazar e ir al estado 99
+    '&'  desplazar e ir al estado 100
+    '|'  desplazar e ir al estado 101
+    '^'  desplazar e ir al estado 102
+
+    ','       [reduce usando la regla 106 (elementos)]
+    $default  reduce usando la regla 106 (elementos)
+
+
+Estado 222
+
+  104 elementos: elementos • ',' elementos
+  108 larray: tipo '[' ']' ID '=' '{' elementos • '}' end
+
+    '}'  desplazar e ir al estado 238
+    ','  desplazar e ir al estado 239
+
+
+Estado 223
+
+   43 multiDimension: tipo '[' ']' '[' ']' ID '=' • NEW tipo '[' expr ']' '[' expr ']' end
+   44               | tipo '[' ']' '[' ']' ID '=' • '{' elementos '}' end
+
+    NEW  desplazar e ir al estado 240
+    '{'  desplazar e ir al estado 241
+
+
+Estado 224
+
+   91 expr: ID '[' expr ']' '[' expr ']' '=' • expr
+
+    FLOAD       desplazar e ir al estado 4
+    STRING      desplazar e ir al estado 5
+    ID          desplazar e ir al estado 61
+    CHAR        desplazar e ir al estado 7
+    DECIMAL     desplazar e ir al estado 8
+    NUMBER      desplazar e ir al estado 9
+    TRUE        desplazar e ir al estado 10
+    FALSE       desplazar e ir al estado 11
+    CONTINUE    desplazar e ir al estado 62
+    ARRAYS      desplazar e ir al estado 27
+    VALUEOF     desplazar e ir al estado 29
+    PARSEINT    desplazar e ir al estado 31
+    PARSEFLOAT  desplazar e ir al estado 32
+    '-'         desplazar e ir al estado 34
+    '('         desplazar e ir al estado 35
+    '!'         desplazar e ir al estado 37
+
+    expr          ir al estado 242
+    callFunction  ir al estado 49
+
+
+Estado 225
+
+   25 loopFor: FOR '(' declaration end expr end assigment ')' • block
+
+    '{'  desplazar e ir al estado 36
+
+    block  ir al estado 243
+
+
+Estado 226
+
+   26 loopFor: FOR '(' tipo ID DOSPUNTOS ID ')' block •
+
+    $default  reduce usando la regla 26 (loopFor)
+
+
+Estado 227
+
+   31 case_stmt: CASE expr • DOSPUNTOS lines
+   55 expr: expr • '+' expr
+   56     | expr • '-' expr
+   57     | expr • '*' expr
+   58     | expr • '/' expr
+   59     | expr • '%' expr
+   61     | expr • AND expr
+   62     | expr • OR expr
+   63     | expr • LE expr
+   64     | expr • GE expr
+   65     | expr • '<' expr
+   66     | expr • '>' expr
+   67     | expr • EQ expr
+   68     | expr • NEQ expr
+   69     | expr • '&' expr
+   70     | expr • '|' expr
+   71     | expr • '^' expr
+   72     | expr • SHR expr
+   73     | expr • SHL expr
+   93     | expr • '.' EQUALS '(' expr ')'
+   94     | expr • '.' LENGTH
+
+    GE         desplazar e ir al estado 84
+    LE         desplazar e ir al estado 85
+    EQ         desplazar e ir al estado 86
+    NEQ        desplazar e ir al estado 87
+    SHR        desplazar e ir al estado 88
+    SHL        desplazar e ir al estado 89
+    OR         desplazar e ir al estado 90
+    AND        desplazar e ir al estado 91
+    DOSPUNTOS  desplazar e ir al estado 244
+    '>'        desplazar e ir al estado 92
+    '<'        desplazar e ir al estado 93
+    '+'        desplazar e ir al estado 94
+    '-'        desplazar e ir al estado 95
+    '*'        desplazar e ir al estado 96
+    '/'        desplazar e ir al estado 97
+    '.'        desplazar e ir al estado 98
+    '%'        desplazar e ir al estado 99
+    '&'        desplazar e ir al estado 100
+    '|'        desplazar e ir al estado 101
+    '^'        desplazar e ir al estado 102
+
+
+Estado 228
+
+   32 case_stmt: DEFAULT DOSPUNTOS • lines
+
+    $default  reduce usando la regla 2 (lines)
+
+    lines  ir al estado 245
+
+
+Estado 229
+
+   34 function: PUBLIC STATIC tipo ID '(' params ')' block •
+
+    $default  reduce usando la regla 34 (function)
+
+
+Estado 230
+
+   38 paramlist: tipo ID ',' paramlist •
+
+    $default  reduce usando la regla 38 (paramlist)
+
+
+Estado 231
+
+   92 expr: ARRAYS '.' INDEXOF '(' expr ',' expr ')' •
+
+    $default  reduce usando la regla 92 (expr)
+
+
+Estado 232
+
+    6 line: SYSTEM '.' OUT '.' PRINTLN '(' ')' end •
+
+    $default  reduce usando la regla 6 (line)
+
+
+Estado 233
+
+    5 line: SYSTEM '.' OUT '.' PRINTLN '(' expr ')' • end
+
+    ';'  desplazar e ir al estado 59
+
+    end  ir al estado 246
+
+
+Estado 234
+
+  109 larray: tipo '[' ']' ID '=' ID '.' ADD • '(' expr ')' end
+
+    '('  desplazar e ir al estado 247
+
+
+Estado 235
+
+  107 larray: tipo '[' ']' ID '=' NEW tipo '[' • expr ']' end
+
+    FLOAD       desplazar e ir al estado 4
+    STRING      desplazar e ir al estado 5
+    ID          desplazar e ir al estado 61
+    CHAR        desplazar e ir al estado 7
+    DECIMAL     desplazar e ir al estado 8
+    NUMBER      desplazar e ir al estado 9
+    TRUE        desplazar e ir al estado 10
+    FALSE       desplazar e ir al estado 11
+    CONTINUE    desplazar e ir al estado 62
+    ARRAYS      desplazar e ir al estado 27
+    VALUEOF     desplazar e ir al estado 29
+    PARSEINT    desplazar e ir al estado 31
+    PARSEFLOAT  desplazar e ir al estado 32
+    '-'         desplazar e ir al estado 34
+    '('         desplazar e ir al estado 35
+    '!'         desplazar e ir al estado 37
+
+    expr          ir al estado 248
+    callFunction  ir al estado 49
+
+
+Estado 236
+
+  104 elementos: elementos • ',' elementos
+  105          | '{' elementos • '}'
+
+    '}'  desplazar e ir al estado 249
+    ','  desplazar e ir al estado 239
+
+
+Estado 237
+
+  103 elementos: expr ',' • elementos
+
+    FLOAD       desplazar e ir al estado 4
+    STRING      desplazar e ir al estado 5
+    ID          desplazar e ir al estado 61
+    CHAR        desplazar e ir al estado 7
+    DECIMAL     desplazar e ir al estado 8
+    NUMBER      desplazar e ir al estado 9
+    TRUE        desplazar e ir al estado 10
+    FALSE       desplazar e ir al estado 11
+    CONTINUE    desplazar e ir al estado 62
+    ARRAYS      desplazar e ir al estado 27
+    VALUEOF     desplazar e ir al estado 29
+    PARSEINT    desplazar e ir al estado 31
+    PARSEFLOAT  desplazar e ir al estado 32
+    '-'         desplazar e ir al estado 34
+    '('         desplazar e ir al estado 35
+    '{'         desplazar e ir al estado 220
+    '!'         desplazar e ir al estado 37
+
+    expr          ir al estado 221
+    callFunction  ir al estado 49
+    elementos     ir al estado 250
+
+
+Estado 238
+
+  108 larray: tipo '[' ']' ID '=' '{' elementos '}' • end
+
+    ';'  desplazar e ir al estado 59
+
+    end  ir al estado 251
+
+
+Estado 239
+
+  104 elementos: elementos ',' • elementos
+
+    FLOAD       desplazar e ir al estado 4
+    STRING      desplazar e ir al estado 5
+    ID          desplazar e ir al estado 61
+    CHAR        desplazar e ir al estado 7
+    DECIMAL     desplazar e ir al estado 8
+    NUMBER      desplazar e ir al estado 9
+    TRUE        desplazar e ir al estado 10
+    FALSE       desplazar e ir al estado 11
+    CONTINUE    desplazar e ir al estado 62
+    ARRAYS      desplazar e ir al estado 27
+    VALUEOF     desplazar e ir al estado 29
+    PARSEINT    desplazar e ir al estado 31
+    PARSEFLOAT  desplazar e ir al estado 32
+    '-'         desplazar e ir al estado 34
+    '('         desplazar e ir al estado 35
+    '{'         desplazar e ir al estado 220
+    '!'         desplazar e ir al estado 37
+
+    expr          ir al estado 221
+    callFunction  ir al estado 49
+    elementos     ir al estado 252
+
+
+Estado 240
+
+   43 multiDimension: tipo '[' ']' '[' ']' ID '=' NEW • tipo '[' expr ']' '[' expr ']' end
+
+    BOOLEAN    desplazar e ir al estado 12
+    TP_DOUBLE  desplazar e ir al estado 13
+    TP_FLOAT   desplazar e ir al estado 14
+    TP_STRING  desplazar e ir al estado 15
+    TP_CHAR    desplazar e ir al estado 16
+    INTEGER    desplazar e ir al estado 17
+    BREAK      desplazar e ir al estado 65
+    CONTINUE   desplazar e ir al estado 66
+    VOID       desplazar e ir al estado 26
+    ARRAY      desplazar e ir al estado 30
+
+    tipo  ir al estado 253
+
+
+Estado 241
+
+   44 multiDimension: tipo '[' ']' '[' ']' ID '=' '{' • elementos '}' end
+
+    FLOAD       desplazar e ir al estado 4
+    STRING      desplazar e ir al estado 5
+    ID          desplazar e ir al estado 61
+    CHAR        desplazar e ir al estado 7
+    DECIMAL     desplazar e ir al estado 8
+    NUMBER      desplazar e ir al estado 9
+    TRUE        desplazar e ir al estado 10
+    FALSE       desplazar e ir al estado 11
+    CONTINUE    desplazar e ir al estado 62
+    ARRAYS      desplazar e ir al estado 27
+    VALUEOF     desplazar e ir al estado 29
+    PARSEINT    desplazar e ir al estado 31
+    PARSEFLOAT  desplazar e ir al estado 32
+    '-'         desplazar e ir al estado 34
+    '('         desplazar e ir al estado 35
+    '{'         desplazar e ir al estado 220
+    '!'         desplazar e ir al estado 37
+
+    expr          ir al estado 221
+    callFunction  ir al estado 49
+    elementos     ir al estado 254
+
+
+Estado 242
+
+   55 expr: expr • '+' expr
+   56     | expr • '-' expr
+   57     | expr • '*' expr
+   58     | expr • '/' expr
+   59     | expr • '%' expr
+   61     | expr • AND expr
+   62     | expr • OR expr
+   63     | expr • LE expr
+   64     | expr • GE expr
+   65     | expr • '<' expr
+   66     | expr • '>' expr
+   67     | expr • EQ expr
+   68     | expr • NEQ expr
+   69     | expr • '&' expr
+   70     | expr • '|' expr
+   71     | expr • '^' expr
+   72     | expr • SHR expr
+   73     | expr • SHL expr
+   91     | ID '[' expr ']' '[' expr ']' '=' expr •
+   93     | expr • '.' EQUALS '(' expr ')'
+   94     | expr • '.' LENGTH
+
+    GE   desplazar e ir al estado 84
+    LE   desplazar e ir al estado 85
+    EQ   desplazar e ir al estado 86
+    NEQ  desplazar e ir al estado 87
+    SHR  desplazar e ir al estado 88
+    SHL  desplazar e ir al estado 89
+    OR   desplazar e ir al estado 90
+    AND  desplazar e ir al estado 91
+    '>'  desplazar e ir al estado 92
+    '<'  desplazar e ir al estado 93
+    '+'  desplazar e ir al estado 94
+    '-'  desplazar e ir al estado 95
+    '*'  desplazar e ir al estado 96
+    '/'  desplazar e ir al estado 97
+    '.'  desplazar e ir al estado 98
+    '%'  desplazar e ir al estado 99
+    '&'  desplazar e ir al estado 100
+    '|'  desplazar e ir al estado 101
+    '^'  desplazar e ir al estado 102
+
+    GE        [reduce usando la regla 91 (expr)]
+    LE        [reduce usando la regla 91 (expr)]
+    EQ        [reduce usando la regla 91 (expr)]
+    NEQ       [reduce usando la regla 91 (expr)]
+    SHR       [reduce usando la regla 91 (expr)]
+    SHL       [reduce usando la regla 91 (expr)]
+    OR        [reduce usando la regla 91 (expr)]
+    AND       [reduce usando la regla 91 (expr)]
+    '>'       [reduce usando la regla 91 (expr)]
+    '<'       [reduce usando la regla 91 (expr)]
+    '+'       [reduce usando la regla 91 (expr)]
+    '-'       [reduce usando la regla 91 (expr)]
+    '*'       [reduce usando la regla 91 (expr)]
+    '/'       [reduce usando la regla 91 (expr)]
+    '.'       [reduce usando la regla 91 (expr)]
+    '%'       [reduce usando la regla 91 (expr)]
+    '&'       [reduce usando la regla 91 (expr)]
+    '|'       [reduce usando la regla 91 (expr)]
+    '^'       [reduce usando la regla 91 (expr)]
+    $default  reduce usando la regla 91 (expr)
+
+
+Estado 243
+
+   25 loopFor: FOR '(' declaration end expr end assigment ')' block •
+
+    $default  reduce usando la regla 25 (loopFor)
+
+
+Estado 244
+
+   31 case_stmt: CASE expr DOSPUNTOS • lines
+
+    $default  reduce usando la regla 2 (lines)
+
+    lines  ir al estado 255
+
+
+Estado 245
+
+    3 lines: lines • line
+   32 case_stmt: DEFAULT DOSPUNTOS lines •
+
+    FLOAD       desplazar e ir al estado 4
+    STRING      desplazar e ir al estado 5
+    ID          desplazar e ir al estado 6
+    CHAR        desplazar e ir al estado 7
+    DECIMAL     desplazar e ir al estado 8
+    NUMBER      desplazar e ir al estado 9
+    TRUE        desplazar e ir al estado 10
+    FALSE       desplazar e ir al estado 11
+    BOOLEAN     desplazar e ir al estado 12
+    TP_DOUBLE   desplazar e ir al estado 13
+    TP_FLOAT    desplazar e ir al estado 14
+    TP_STRING   desplazar e ir al estado 15
+    TP_CHAR     desplazar e ir al estado 16
+    INTEGER     desplazar e ir al estado 17
+    IF          desplazar e ir al estado 18
+    WHILE       desplazar e ir al estado 19
+    FOR         desplazar e ir al estado 20
+    SWITCH      desplazar e ir al estado 21
+    BREAK       desplazar e ir al estado 22
+    CONTINUE    desplazar e ir al estado 23
+    RETURN      desplazar e ir al estado 24
+    PUBLIC      desplazar e ir al estado 25
+    VOID        desplazar e ir al estado 26
+    ARRAYS      desplazar e ir al estado 27
+    SYSTEM      desplazar e ir al estado 28
+    VALUEOF     desplazar e ir al estado 29
+    ARRAY       desplazar e ir al estado 30
+    PARSEINT    desplazar e ir al estado 31
+    PARSEFLOAT  desplazar e ir al estado 32
+    FINAL       desplazar e ir al estado 33
+    '-'         desplazar e ir al estado 34
+    '('         desplazar e ir al estado 35
+    '{'         desplazar e ir al estado 36
+    '!'         desplazar e ir al estado 37
+
+    $default  reduce usando la regla 32 (case_stmt)
+
+    line              ir al estado 38
+    sentenciasIf      ir al estado 39
+    loopWhile         ir al estado 40
+    loopFor           ir al estado 41
+    block             ir al estado 42
+    function          ir al estado 43
+    declaration       ir al estado 44
+    assigment         ir al estado 45
+    multiDimension    ir al estado 46
+    tipo              ir al estado 47
+    expr              ir al estado 48
+    callFunction      ir al estado 49
+    sentenciasSwitch  ir al estado 50
+    larray            ir al estado 51
+
+
+Estado 246
+
+    5 line: SYSTEM '.' OUT '.' PRINTLN '(' expr ')' end •
+
+    $default  reduce usando la regla 5 (line)
+
+
+Estado 247
+
+  109 larray: tipo '[' ']' ID '=' ID '.' ADD '(' • expr ')' end
+
+    FLOAD       desplazar e ir al estado 4
+    STRING      desplazar e ir al estado 5
+    ID          desplazar e ir al estado 61
+    CHAR        desplazar e ir al estado 7
+    DECIMAL     desplazar e ir al estado 8
+    NUMBER      desplazar e ir al estado 9
+    TRUE        desplazar e ir al estado 10
+    FALSE       desplazar e ir al estado 11
+    CONTINUE    desplazar e ir al estado 62
+    ARRAYS      desplazar e ir al estado 27
+    VALUEOF     desplazar e ir al estado 29
+    PARSEINT    desplazar e ir al estado 31
+    PARSEFLOAT  desplazar e ir al estado 32
+    '-'         desplazar e ir al estado 34
+    '('         desplazar e ir al estado 35
+    '!'         desplazar e ir al estado 37
+
+    expr          ir al estado 256
+    callFunction  ir al estado 49
+
+
+Estado 248
+
+   55 expr: expr • '+' expr
+   56     | expr • '-' expr
+   57     | expr • '*' expr
+   58     | expr • '/' expr
+   59     | expr • '%' expr
+   61     | expr • AND expr
+   62     | expr • OR expr
+   63     | expr • LE expr
+   64     | expr • GE expr
+   65     | expr • '<' expr
+   66     | expr • '>' expr
+   67     | expr • EQ expr
+   68     | expr • NEQ expr
+   69     | expr • '&' expr
+   70     | expr • '|' expr
+   71     | expr • '^' expr
+   72     | expr • SHR expr
+   73     | expr • SHL expr
+   93     | expr • '.' EQUALS '(' expr ')'
+   94     | expr • '.' LENGTH
+  107 larray: tipo '[' ']' ID '=' NEW tipo '[' expr • ']' end
+
+    GE   desplazar e ir al estado 84
+    LE   desplazar e ir al estado 85
+    EQ   desplazar e ir al estado 86
+    NEQ  desplazar e ir al estado 87
+    SHR  desplazar e ir al estado 88
+    SHL  desplazar e ir al estado 89
+    OR   desplazar e ir al estado 90
+    AND  desplazar e ir al estado 91
+    '>'  desplazar e ir al estado 92
+    '<'  desplazar e ir al estado 93
+    '+'  desplazar e ir al estado 94
+    '-'  desplazar e ir al estado 95
+    '*'  desplazar e ir al estado 96
+    '/'  desplazar e ir al estado 97
+    '.'  desplazar e ir al estado 98
+    ']'  desplazar e ir al estado 257
+    '%'  desplazar e ir al estado 99
+    '&'  desplazar e ir al estado 100
+    '|'  desplazar e ir al estado 101
+    '^'  desplazar e ir al estado 102
+
+
+Estado 249
+
+  105 elementos: '{' elementos '}' •
+
+    $default  reduce usando la regla 105 (elementos)
+
+
+Estado 250
+
+  103 elementos: expr ',' elementos •
+  104          | elementos • ',' elementos
+
+    ','  desplazar e ir al estado 239
+
+    ','       [reduce usando la regla 103 (elementos)]
+    $default  reduce usando la regla 103 (elementos)
+
+
+Estado 251
+
+  108 larray: tipo '[' ']' ID '=' '{' elementos '}' end •
+
+    $default  reduce usando la regla 108 (larray)
+
+
+Estado 252
+
+  104 elementos: elementos • ',' elementos
+  104          | elementos ',' elementos •
+
+    ','  desplazar e ir al estado 239
+
+    ','       [reduce usando la regla 104 (elementos)]
+    $default  reduce usando la regla 104 (elementos)
+
+
+Estado 253
+
+   43 multiDimension: tipo '[' ']' '[' ']' ID '=' NEW tipo • '[' expr ']' '[' expr ']' end
+
+    '['  desplazar e ir al estado 258
+
+
+Estado 254
+
+   44 multiDimension: tipo '[' ']' '[' ']' ID '=' '{' elementos • '}' end
+  104 elementos: elementos • ',' elementos
+
+    '}'  desplazar e ir al estado 259
+    ','  desplazar e ir al estado 239
+
+
+Estado 255
+
+    3 lines: lines • line
+   31 case_stmt: CASE expr DOSPUNTOS lines •
+
+    FLOAD       desplazar e ir al estado 4
+    STRING      desplazar e ir al estado 5
+    ID          desplazar e ir al estado 6
+    CHAR        desplazar e ir al estado 7
+    DECIMAL     desplazar e ir al estado 8
+    NUMBER      desplazar e ir al estado 9
+    TRUE        desplazar e ir al estado 10
+    FALSE       desplazar e ir al estado 11
+    BOOLEAN     desplazar e ir al estado 12
+    TP_DOUBLE   desplazar e ir al estado 13
+    TP_FLOAT    desplazar e ir al estado 14
+    TP_STRING   desplazar e ir al estado 15
+    TP_CHAR     desplazar e ir al estado 16
+    INTEGER     desplazar e ir al estado 17
+    IF          desplazar e ir al estado 18
+    WHILE       desplazar e ir al estado 19
+    FOR         desplazar e ir al estado 20
+    SWITCH      desplazar e ir al estado 21
+    BREAK       desplazar e ir al estado 22
+    CONTINUE    desplazar e ir al estado 23
+    RETURN      desplazar e ir al estado 24
+    PUBLIC      desplazar e ir al estado 25
+    VOID        desplazar e ir al estado 26
+    ARRAYS      desplazar e ir al estado 27
+    SYSTEM      desplazar e ir al estado 28
+    VALUEOF     desplazar e ir al estado 29
+    ARRAY       desplazar e ir al estado 30
+    PARSEINT    desplazar e ir al estado 31
+    PARSEFLOAT  desplazar e ir al estado 32
+    FINAL       desplazar e ir al estado 33
+    '-'         desplazar e ir al estado 34
+    '('         desplazar e ir al estado 35
+    '{'         desplazar e ir al estado 36
+    '!'         desplazar e ir al estado 37
+
+    $default  reduce usando la regla 31 (case_stmt)
+
+    line              ir al estado 38
+    sentenciasIf      ir al estado 39
+    loopWhile         ir al estado 40
+    loopFor           ir al estado 41
+    block             ir al estado 42
+    function          ir al estado 43
+    declaration       ir al estado 44
+    assigment         ir al estado 45
+    multiDimension    ir al estado 46
+    tipo              ir al estado 47
+    expr              ir al estado 48
+    callFunction      ir al estado 49
+    sentenciasSwitch  ir al estado 50
+    larray            ir al estado 51
+
+
+Estado 256
+
+   55 expr: expr • '+' expr
+   56     | expr • '-' expr
+   57     | expr • '*' expr
+   58     | expr • '/' expr
+   59     | expr • '%' expr
+   61     | expr • AND expr
+   62     | expr • OR expr
+   63     | expr • LE expr
+   64     | expr • GE expr
+   65     | expr • '<' expr
+   66     | expr • '>' expr
+   67     | expr • EQ expr
+   68     | expr • NEQ expr
+   69     | expr • '&' expr
+   70     | expr • '|' expr
+   71     | expr • '^' expr
+   72     | expr • SHR expr
+   73     | expr • SHL expr
+   93     | expr • '.' EQUALS '(' expr ')'
+   94     | expr • '.' LENGTH
+  109 larray: tipo '[' ']' ID '=' ID '.' ADD '(' expr • ')' end
+
+    GE   desplazar e ir al estado 84
+    LE   desplazar e ir al estado 85
+    EQ   desplazar e ir al estado 86
+    NEQ  desplazar e ir al estado 87
+    SHR  desplazar e ir al estado 88
+    SHL  desplazar e ir al estado 89
+    OR   desplazar e ir al estado 90
+    AND  desplazar e ir al estado 91
+    '>'  desplazar e ir al estado 92
+    '<'  desplazar e ir al estado 93
+    '+'  desplazar e ir al estado 94
+    '-'  desplazar e ir al estado 95
+    '*'  desplazar e ir al estado 96
+    '/'  desplazar e ir al estado 97
+    '.'  desplazar e ir al estado 98
+    ')'  desplazar e ir al estado 260
+    '%'  desplazar e ir al estado 99
+    '&'  desplazar e ir al estado 100
+    '|'  desplazar e ir al estado 101
+    '^'  desplazar e ir al estado 102
+
+
+Estado 257
+
+  107 larray: tipo '[' ']' ID '=' NEW tipo '[' expr ']' • end
+
+    ';'  desplazar e ir al estado 59
+
+    end  ir al estado 261
+
+
+Estado 258
+
+   43 multiDimension: tipo '[' ']' '[' ']' ID '=' NEW tipo '[' • expr ']' '[' expr ']' end
+
+    FLOAD       desplazar e ir al estado 4
+    STRING      desplazar e ir al estado 5
+    ID          desplazar e ir al estado 61
+    CHAR        desplazar e ir al estado 7
+    DECIMAL     desplazar e ir al estado 8
+    NUMBER      desplazar e ir al estado 9
+    TRUE        desplazar e ir al estado 10
+    FALSE       desplazar e ir al estado 11
+    CONTINUE    desplazar e ir al estado 62
+    ARRAYS      desplazar e ir al estado 27
+    VALUEOF     desplazar e ir al estado 29
+    PARSEINT    desplazar e ir al estado 31
+    PARSEFLOAT  desplazar e ir al estado 32
+    '-'         desplazar e ir al estado 34
+    '('         desplazar e ir al estado 35
+    '!'         desplazar e ir al estado 37
+
+    expr          ir al estado 262
+    callFunction  ir al estado 49
+
+
+Estado 259
+
+   44 multiDimension: tipo '[' ']' '[' ']' ID '=' '{' elementos '}' • end
+
+    ';'  desplazar e ir al estado 59
+
+    end  ir al estado 263
+
+
+Estado 260
+
+  109 larray: tipo '[' ']' ID '=' ID '.' ADD '(' expr ')' • end
+
+    ';'  desplazar e ir al estado 59
+
+    end  ir al estado 264
+
+
+Estado 261
+
+  107 larray: tipo '[' ']' ID '=' NEW tipo '[' expr ']' end •
+
+    $default  reduce usando la regla 107 (larray)
+
+
+Estado 262
+
+   43 multiDimension: tipo '[' ']' '[' ']' ID '=' NEW tipo '[' expr • ']' '[' expr ']' end
+   55 expr: expr • '+' expr
+   56     | expr • '-' expr
+   57     | expr • '*' expr
+   58     | expr • '/' expr
+   59     | expr • '%' expr
+   61     | expr • AND expr
+   62     | expr • OR expr
+   63     | expr • LE expr
+   64     | expr • GE expr
+   65     | expr • '<' expr
+   66     | expr • '>' expr
+   67     | expr • EQ expr
+   68     | expr • NEQ expr
+   69     | expr • '&' expr
+   70     | expr • '|' expr
+   71     | expr • '^' expr
+   72     | expr • SHR expr
+   73     | expr • SHL expr
+   93     | expr • '.' EQUALS '(' expr ')'
+   94     | expr • '.' LENGTH
+
+    GE   desplazar e ir al estado 84
+    LE   desplazar e ir al estado 85
+    EQ   desplazar e ir al estado 86
+    NEQ  desplazar e ir al estado 87
+    SHR  desplazar e ir al estado 88
+    SHL  desplazar e ir al estado 89
+    OR   desplazar e ir al estado 90
+    AND  desplazar e ir al estado 91
+    '>'  desplazar e ir al estado 92
+    '<'  desplazar e ir al estado 93
+    '+'  desplazar e ir al estado 94
+    '-'  desplazar e ir al estado 95
+    '*'  desplazar e ir al estado 96
+    '/'  desplazar e ir al estado 97
+    '.'  desplazar e ir al estado 98
+    ']'  desplazar e ir al estado 265
+    '%'  desplazar e ir al estado 99
+    '&'  desplazar e ir al estado 100
+    '|'  desplazar e ir al estado 101
+    '^'  desplazar e ir al estado 102
+
+
+Estado 263
+
+   44 multiDimension: tipo '[' ']' '[' ']' ID '=' '{' elementos '}' end •
+
+    $default  reduce usando la regla 44 (multiDimension)
+
+
+Estado 264
+
+  109 larray: tipo '[' ']' ID '=' ID '.' ADD '(' expr ')' end •
+
+    $default  reduce usando la regla 109 (larray)
+
+
+Estado 265
+
+   43 multiDimension: tipo '[' ']' '[' ']' ID '=' NEW tipo '[' expr ']' • '[' expr ']' end
+
+    '['  desplazar e ir al estado 266
+
+
+Estado 266
+
+   43 multiDimension: tipo '[' ']' '[' ']' ID '=' NEW tipo '[' expr ']' '[' • expr ']' end
+
+    FLOAD       desplazar e ir al estado 4
+    STRING      desplazar e ir al estado 5
+    ID          desplazar e ir al estado 61
+    CHAR        desplazar e ir al estado 7
+    DECIMAL     desplazar e ir al estado 8
+    NUMBER      desplazar e ir al estado 9
+    TRUE        desplazar e ir al estado 10
+    FALSE       desplazar e ir al estado 11
+    CONTINUE    desplazar e ir al estado 62
+    ARRAYS      desplazar e ir al estado 27
+    VALUEOF     desplazar e ir al estado 29
+    PARSEINT    desplazar e ir al estado 31
+    PARSEFLOAT  desplazar e ir al estado 32
+    '-'         desplazar e ir al estado 34
+    '('         desplazar e ir al estado 35
+    '!'         desplazar e ir al estado 37
+
+    expr          ir al estado 267
+    callFunction  ir al estado 49
+
+
+Estado 267
+
+   43 multiDimension: tipo '[' ']' '[' ']' ID '=' NEW tipo '[' expr ']' '[' expr • ']' end
+   55 expr: expr • '+' expr
+   56     | expr • '-' expr
+   57     | expr • '*' expr
+   58     | expr • '/' expr
+   59     | expr • '%' expr
+   61     | expr • AND expr
+   62     | expr • OR expr
+   63     | expr • LE expr
+   64     | expr • GE expr
+   65     | expr • '<' expr
+   66     | expr • '>' expr
+   67     | expr • EQ expr
+   68     | expr • NEQ expr
+   69     | expr • '&' expr
+   70     | expr • '|' expr
+   71     | expr • '^' expr
+   72     | expr • SHR expr
+   73     | expr • SHL expr
+   93     | expr • '.' EQUALS '(' expr ')'
+   94     | expr • '.' LENGTH
+
+    GE   desplazar e ir al estado 84
+    LE   desplazar e ir al estado 85
+    EQ   desplazar e ir al estado 86
+    NEQ  desplazar e ir al estado 87
+    SHR  desplazar e ir al estado 88
+    SHL  desplazar e ir al estado 89
+    OR   desplazar e ir al estado 90
+    AND  desplazar e ir al estado 91
+    '>'  desplazar e ir al estado 92
+    '<'  desplazar e ir al estado 93
+    '+'  desplazar e ir al estado 94
+    '-'  desplazar e ir al estado 95
+    '*'  desplazar e ir al estado 96
+    '/'  desplazar e ir al estado 97
+    '.'  desplazar e ir al estado 98
+    ']'  desplazar e ir al estado 268
+    '%'  desplazar e ir al estado 99
+    '&'  desplazar e ir al estado 100
+    '|'  desplazar e ir al estado 101
+    '^'  desplazar e ir al estado 102
+
+
+Estado 268
+
+   43 multiDimension: tipo '[' ']' '[' ']' ID '=' NEW tipo '[' expr ']' '[' expr ']' • end
+
+    ';'  desplazar e ir al estado 59
+
+    end  ir al estado 269
+
+
+Estado 269
+
+   43 multiDimension: tipo '[' ']' '[' ']' ID '=' NEW tipo '[' expr ']' '[' expr ']' end •
+
+    $default  reduce usando la regla 43 (multiDimension)
