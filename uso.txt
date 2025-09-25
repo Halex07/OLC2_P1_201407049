@@ -1,0 +1,16 @@
+.\build\calc.exe program.txt
+
+program.txt es el archivo de entrada
+
+./build/calc program.txt
+
+sudo apt-get update
+
+sudo apt update
+sudo apt install build-essential libgtk-3-dev
+
+gcc `pkg-config --cflags gtk+-3.0` mi_app.c -o henry `pkg-config --libs gtk+-3.0`
+
+para abrir la interfaz
+./henry
+
