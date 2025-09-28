@@ -31,6 +31,7 @@
   #include "ast/controllers/length.h"
   #include "ast/controllers/add.h"
   #include "ast/controllers/valueof.h"
+  #include "ast/sentencias/double.h"
  
 
   extern int yylex(void);
@@ -52,6 +53,8 @@
   NodoBase*  node;
   struct ArgList* args;  /* lista de argumentos */
   struct Param*   plist; /* lista de parámetros */  
+  struct CaseNode* newCaso;
+  struct ExprList* exprlist;
   char*      str;
   char       ch;
   int         num;
@@ -79,8 +82,10 @@
 %type <node> program lines line expr declaration assigment block function callFunction loopFor multiDimension  
 %type <node> loopWhile sentenciasIf sentenciasSwitch case_list case_stmt larray elementos 
 %type <tipo> tipo
+%type <exprlist> case_exprs
 %type <plist> params paramlist
 %type <args> args arglist
+%type <newCaso> caselist case
 
 %start program 
 
@@ -120,6 +125,7 @@ line
 sentenciasIf
    : IF '(' expr ')' block    { $$ = (NodoBase*)NewIf(@1.first_line,@1.first_column,$3,$5); }  
    | IF '(' expr ')' block ELSE block { $$ = (NodoBase*)NewElse(@1.first_line,@1.first_column,$3,$5,$7); }
+   | IF '(' expr ')' block ELSE sentenciasIf { $$ = (NodoBase*)NewElse(@1.first_line,@1.first_column,$3,$5,$7); }
    ;
 
 loopWhile 
@@ -147,13 +153,13 @@ case_list
     | case_list case_stmt {
         $$ = $1;
         SwitchArray* tmp = (SwitchArray*)$$;
-        AddCaseArray(tmp, ((SwitchArray*)$2)->cases[0].expr,
+        AddCaseArray(tmp, ((SwitchArray*)$2)->cases[0].exprs,
                           ((SwitchArray*)$2)->cases[0].block);
     }
     ;
 
 case_stmt
-    : CASE expr DOSPUNTOS lines {$$ = (NodoBase*)NewSwitchArray(@1.first_line, @1.first_column, NULL);
+    : CASE case_exprs DOSPUNTOS lines BREAK end {$$ = (NodoBase*)NewSwitchArray(@1.first_line, @1.first_column, NULL);
                                        AddCaseArray((SwitchArray*)$$, $2, $4);
     }
     | DEFAULT DOSPUNTOS lines {
@@ -161,10 +167,15 @@ case_stmt
         AddCaseArray((SwitchArray*)$$, NULL, $3); 
     }
   ;
+  case_exprs
+      : expr{ $$ = NewExprList($1);}
+      | case_exprs '|' expr{ $$ = AddExpr($1, $3);}
+      ;
 
 function
   : PUBLIC tipo ID '(' params ')' block {$$ = (NodoBase*)NewFunction(@1.first_line, @1.first_column, $3, $2, (Param*)$5, $7);}
   | PUBLIC STATIC tipo ID '(' params ')' block {$$ = (NodoBase*)NewFunction(@1.first_line, @1.first_column, $4, $3, (Param*)$6, $8);}
+  | tipo ID '(' params ')' block {$$ = (NodoBase*)NewFunction(@1.first_line, @1.first_column, $2, $1, (Param*)$4, $6);}
   ; 
 
 params
@@ -253,6 +264,7 @@ expr
   | expr '.' LENGTH    { $$ = (NodoBase*) NewLength(@2.first_line, @2.first_column, $1); }
   | PARSEINT '(' expr ')' { $$ = (NodoBase*)NewInt(@1.first_line,@1.first_column,$3);}
   | PARSEFLOAT '(' expr ')' { $$ = (NodoBase*)NewFloat(@1.first_line,@1.first_column,$3); }
+  | PARSEDOUBLE '(' expr ')' { $$ = (NodoBase*)NewDouble(@1.first_line,@1.first_column,$3); }
   ;
 
 callFunction
@@ -269,16 +281,26 @@ arglist
   | expr ',' arglist { $$ = NewArgList($1, $3); }
   ;
 
-sentenciasSwitch 
-    : SWITCH '(' expr ')' '{' case_list '}' {
-        $$ = (NodoBase*)NewSwitchArray(@1.first_line, @1.first_column, $3);     
-        SwitchArray* tmp = (SwitchArray*)$6;
-        for (int i = 0; i < tmp->count; i++) {
-            AddCaseArray((SwitchArray*)$$, tmp->cases[i].expr, tmp->cases[i].block);
+sentenciasSwitch : SWITCH '(' expr ')' '{' caselist '}' { 
+        $$ = (NodoBase*)NewSwitch(@1.first_line, @1.first_column,$3,$6);
         }
-         
-    }
-;
+      ;
+
+caselist : /* vacío */ { $$ = NULL; } 
+         | caselist case { $$ = AddCaseNode($1, $2); } 
+         ;
+
+case
+  : CASE case_exprs DOSPUNTOS lines BREAK end { $$ = NewCaseNode($2, $4); }
+  | DEFAULT DOSPUNTOS lines                   { $$ = NewCaseNode(NULL, $3); }
+  ;
+
+case_exprs
+  : expr                { $$ = NewExprList($1); }
+  | case_exprs '|' expr  { $$ = AddExpr($1, $3); }
+  ;
+
+
 elementos 
   : expr ',' elementos       { $1->siguiente = $3; $$ = $1; }
   | elementos ',' elementos  { NodoBase *last = $1; while (last->siguiente) last = last->siguiente; last->siguiente = $3; $$ = $1;}
