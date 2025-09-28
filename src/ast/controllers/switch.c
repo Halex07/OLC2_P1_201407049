@@ -4,54 +4,116 @@
 #include "entorno/ast.h"
 #include "ast/controllers/switch.h"
 
-static Symbol EjecutarArray(NodoBase* self, AST* ast, void* env);
-static void DestruirArray(NodoBase* self);
 
-
-SwitchArray* NewSwitchArray(int lin, int col, NodoBase* expr) {
-    SwitchArray* s = (SwitchArray*)malloc(sizeof(SwitchArray));
-    NodoBase_init(&s->base, "SWITCH_ARRAY", lin, col, EjecutarArray, DestruirArray);
-    s->expr = expr;
-    s->count = 0;
-    s->capacity = 4;
-    s->cases = (CaseArray*)malloc(sizeof(CaseArray) * s->capacity);
-    return s;
+ExprList *NewExprList(NodoBase *expr)
+{
+    ExprList *e = (ExprList *)malloc(sizeof(ExprList));
+    e->expr = expr;
+    e->next = NULL;
+    return e;
 }
 
-
-void AddCaseArray(SwitchArray* s, NodoBase* expr, NodoBase* block) {
-    if (s->count >= s->capacity) {
-        s->capacity *= 2;
-        s->cases = (CaseArray*)realloc(s->cases, sizeof(CaseArray) * s->capacity);
-    }
-    s->cases[s->count].expr = expr;
-    s->cases[s->count].block = block;
-    s->count++;
+ExprList *AddExpr(ExprList *list, NodoBase *expr)
+{
+    if (!list)
+        return NewExprList(expr);
+    ExprList *tmp = list;
+    while (tmp->next)
+        tmp = tmp->next;
+    tmp->next = NewExprList(expr);
+    return list;
 }
 
-static Symbol EjecutarArray(NodoBase* self, AST* ast, void* env) {
-    SwitchArray* s = (SwitchArray*)self;
+CaseNode *NewCaseNode(ExprList *exprs, NodoBase *block)
+{
+    CaseNode *c = (CaseNode *)malloc(sizeof(CaseNode));
+    c->exprs = exprs;
+    c->block = block;
+    c->next = NULL;
+    return c;
+}
+
+CaseNode *AddCaseNode(CaseNode *list, CaseNode *nuevo)
+{
+    if (!list)
+        return nuevo;
+    CaseNode *tmp = list;
+    while (tmp->next)
+        tmp = tmp->next;
+    tmp->next = nuevo;
+    return list;
+}
+
+static Symbol Ejecutar(NodoBase *self, AST *ast, void *env)
+{
+    Switch *s = (Switch *)self;
     Symbol cond = NodoBase_Ejecutar(s->expr, ast, env);
 
-    for (int i = 0; i < s->count; i++) {
-        CaseArray c = s->cases[i];
-        if (c.expr) {
-            Symbol val = NodoBase_Ejecutar(c.expr, ast, env);
-            if (val.tipo == cond.tipo && val.val.i == cond.val.i) {
-                NodoBase_Ejecutar(c.block, ast, env);
-                return SymNull(self->lin, self->col);
+    CaseNode *tmp = s->cases;
+    int matched = 0;
+    while (tmp)
+    {
+        if (tmp->exprs)
+        {
+            ExprList *e = tmp->exprs;
+            while (e)
+            {
+                Symbol val = NodoBase_Ejecutar(e->expr, ast, env);
+               // printf("Comparando %d con %d\n", cond.val.i, val.val.i);
+
+                if (val.tipo == cond.tipo || val.val.i == cond.val.i)
+                {
+                    matched = 1;
+                    if (val.val.i % 2 == 0)
+                    {
+                        NodoBase_Ejecutar(tmp->block, ast, env);
+                        goto end; 
+                    }
+                  
+                }
+                e = e->next;
             }
-        } else {
-            
-            NodoBase_Ejecutar(c.block, ast, env);
-            return SymNull(self->lin, self->col);
         }
+        else
+        {  
+            if (!matched)
+            {
+                NodoBase_Ejecutar(tmp->block, ast, env);
+                goto end;
+            }
+        }
+        tmp = tmp->next;
     }
+
+end:
     return SymNull(self->lin, self->col);
 }
 
-static void DestruirArray(NodoBase* self) {
-    SwitchArray* s = (SwitchArray*)self;
-    free(s->cases);
+static void Destruir(NodoBase *self)
+{
+    Switch *s = (Switch *)self;
+    CaseNode *tmp = s->cases;
+    while (tmp)
+    {
+        ExprList *e = tmp->exprs;
+        while (e)
+        {
+            ExprList *nextE = e->next;
+            free(e);
+            e = nextE;
+        }
+        CaseNode *next = tmp->next;
+        free(tmp);
+        tmp = next;
+    }
     free(s);
+}
+
+Switch *NewSwitch(int lin, int col, NodoBase *expr, CaseNode *cases)
+{
+    Switch *s = (Switch *)malloc(sizeof(Switch));
+    NodoBase_init(&s->base, "SWITCH", lin, col, Ejecutar, Destruir);
+    s->expr = expr;
+    s->cases = cases;
+    return s;
 }
